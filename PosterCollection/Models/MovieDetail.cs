@@ -40,7 +40,7 @@ namespace PosterCollection.Models
         public string name { get; set; }
     }
 
-    public class PosterDetail
+    public class MovieDetail
     {
         public bool adult { get; set; }
         public string backdrop_path { get; set; }

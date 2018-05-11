@@ -13,6 +13,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PosterCollection.ViewModels;
+using PosterCollection.Models;
+using System.Net.Http;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -36,9 +40,28 @@ namespace PosterCollection
             viewModel = ViewModel.Instance;
         }
 
-        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void GridView_MovieItemClick(object sender, ItemClickEventArgs e)
         {
+            var item = (MovieResult)e.ClickedItem;
+            String url = String.Format("https://api.themoviedb.org/3/movie/{0}?api_key=7888f0042a366f63289ff571b68b7ce0", item.id);
+            HttpClient client = new HttpClient();
+            String Jresult = await client.GetStringAsync(url);
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(MovieDetail));
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+            viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
+            this.Frame.Navigate(typeof(DetailPage), 0);
+        }
 
+        private async void GridView_TVItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = (TVResult)e.ClickedItem;
+            String url = String.Format("https://api.themoviedb.org/3/tv/{0}?api_key=7888f0042a366f63289ff571b68b7ce0", item.id);
+            HttpClient client = new HttpClient();
+            String Jresult = await client.GetStringAsync(url);
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TVDetail));
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+            viewModel.TheTVDetail = (TVDetail)serializer.ReadObject(ms);
+            this.Frame.Navigate(typeof(DetailPage), 1);
         }
     }
 }

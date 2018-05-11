@@ -32,19 +32,45 @@ namespace PosterCollection
                 String url = String.Format("https://api.themoviedb.org/3/search/movie?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}", Search.Text);
                 HttpClient client = new HttpClient();
                 String Jresult = await client.GetStringAsync(url);
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryList));
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
-                QueryList queryList = (QueryList)serializer.ReadObject(ms);
-                if(queryList.total_results == 0)
+                QueryMovieList queryMovieList = (QueryMovieList)serializer.ReadObject(ms);
+
+                url = String.Format("https://api.themoviedb.org/3/search/tv?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}", Search.Text);
+                Jresult = await client.GetStringAsync(url);
+                serializer = new DataContractJsonSerializer(typeof(QueryTVList));
+                ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+                QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
+
+                if (queryMovieList.total_results + queryTVList.total_results == 0)
                 {
                     await new Windows.UI.Popups.MessageDialog("Found nothing, please change the key words and try again! ").ShowAsync();
                 }
                 else
                 {
-                    foreach(var result in queryList.results)
+                    foreach(var result in queryMovieList.results)
                     {
-                        result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
-                        viewModel.AddResult(result);
+                        if(result.poster_path != null)
+                        {
+                            result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
+                        }
+                        else
+                        {
+                            result.poster_path = "Assets/defaultPoster.jpg";
+                        }
+                        viewModel.AddMovieResult(result);
+                    }
+                    foreach(var result in queryTVList.results)
+                    {
+                        if (result.poster_path != null)
+                        {
+                            result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
+                        }
+                        else
+                        {
+                            result.poster_path = "Assets/defaultPoster.jpg";
+                        }
+                        viewModel.AddTVResult(result);
                     }
                     this.Frame.Navigate(typeof(ListPage));
                 }
