@@ -40,7 +40,7 @@
                       >
                     </GridView>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Margin="5">
+                <StackPanel Margin="5">
                     <TextBlock FontFamily="Microsoft YaHei" FontSize="24">TV Results:</TextBlock>
                     <GridView ItemsSource="{x:Bind viewModel.QueryTVResults}" 
                       IsItemClickEnabled="True" 

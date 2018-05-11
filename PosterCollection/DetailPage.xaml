@@ -9,17 +9,18 @@
 
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="{x:Bind background}" Opacity="0.7"/>
+            <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
         </Grid.Background>
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="400" />
+                        <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="DetailGrid.(Grid.Row)" Value="0" />
+                        <Setter Target="movieDetailGrid.(Grid.Row)" Value="0" />
+                        <Setter Target="movieDetailGrid.(Grid.Column)" Value="1" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -27,113 +28,100 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="DetailGrid.(Grid.Row)" Value="1" />
-                        <Setter Target="DetailGrid.(Grid.Column)" Value="0" />
+                        <Setter Target="movieDetailGrid.(Grid.Row)" Value="1" />
+                        <Setter Target="movieDetailGrid.(Grid.Column)" Value="0" />
+                        <Setter Target="movieDetailGrid.(Grid.ColumnSpan)" Value="2"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <ScrollViewer>
-            <Grid>
+            <Grid Margin="15">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
                 <!-- Detail Grid -->
-                <Grid Name="DetailGrid" Margin="10">
+                <Image Name="PosterImage" Width="400" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top" Source="{x:Bind Mdetail.poster_path}"/>
+                <Grid Name="movieDetailGrid" Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Original Title: " FontWeight="Bold" Margin="10"/>
+                    <TextBlock Text="{x:Bind Mdetail.original_title}" Margin="10" Grid.Column="1" TextWrapping="Wrap"/>
 
-                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <TextBlock Text="Title: " FontWeight="Bold" Grid.Row="1" Margin="10"/>
+                    <TextBlock Text="{x:Bind Mdetail.title}" Margin="10" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap"/>
 
-                        <Image Name="PosterImage" Grid.RowSpan="2"  VerticalAlignment="Top" />
-                        <TextBlock Name="TitleTextBlock" 
-                           FontSize="32" 
-                           TextWrapping="Wrap"                                   
-                           Grid.Column="1" 
-                           Margin="10,0,0,0" />
-                        <TextBlock Name="DetailTextBlock" 
-                           Grid.Row="1" 
-                           Grid.Column="1" 
-                           TextWrapping="Wrap"
-                           Margin="10,0,0,0" />
-                    </Grid>
+                    <TextBlock Text="Original Language: " FontWeight="Bold" Grid.Row="2" Margin="10"/>
+                    <TextBlock Text="{x:Bind Mdetail.original_language}" Margin="10" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"/>
 
-                    <!-- List of Comics -->
-                    <GridView Name="ComicsGridView" 
-                      Grid.Row="1" 
-                      ItemsSource="{x:Bind MarvelComics}"
-                      IsItemClickEnabled="True" 
-                      ItemClick="ComicsGridView_ItemClick">
-                        <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="data:ComicBook">
-                                <Image Source="{x:Bind thumbnail.small}" Width="100" Height="150" />
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
+                    <TextBlock Text="Spoken Languages" FontWeight="Bold" Grid.Row="3" Margin="10"/>
+                    <TextBlock Name="spokenLanguageTextBlock" Margin="10" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
 
-                    <!-- Comic Details -->
-                    <Grid Grid.Row="2" 
-                  HorizontalAlignment="Left" 
-                  VerticalAlignment="Top">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <TextBlock Text="Genres: " FontWeight="Bold" Grid.Row="4" Margin="10"/>
+                    <TextBlock Name="genresTextBlock" Margin="10" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap"/>
 
-                        <Image Name="ComicDetailImage" 
-                            Grid.Column="0" 
-                            Grid.RowSpan="2" 
-                            VerticalAlignment="Top" />
-                        <TextBlock Name="ComicDetailNameTextBlock" 
-                           FontSize="32" 
-                           Grid.Column="1" 
-                           TextWrapping="Wrap"
-                           Margin="10,0,10,0" />
-                        <TextBlock Name="ComicDetailDescriptionTextBlock" 
-                           Grid.Row="1" 
-                           Grid.Column="1" 
-                           TextWrapping="Wrap"
-                           Margin="10,0,10,0" />
+                    <TextBlock Text="Production Countries: " FontWeight="Bold" Grid.Row="5" Margin="10"/>
+                    <TextBlock Name="productionCountriesTextBlock" Margin="10" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"/>
 
-                    </Grid>
+                    <TextBlock Text="Production Companies: " FontWeight="Bold" Grid.Row="6" Margin="10"/>
+                    <TextBlock Name="productionCompaniesTextBlock"  Margin="10" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"/>
 
+                    <TextBlock Text="Release Date: " FontWeight="Bold" Grid.Row="7" Margin="10"/>
+                    <TextBlock Text="{x:Bind Mdetail.release_date}" Margin="10" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap"/>
 
+                    <TextBlock Text="Runtime: " FontWeight="Bold" Grid.Row="8" Margin="10"/>
+                    <TextBlock Name="runtimeTextBlock" Margin="10" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Budget: " FontWeight="Bold" Grid.Row="9" Margin="10"/>
+                    <TextBlock Name="budgetTextBlock" Margin="10" Grid.Row="9" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Revenue: " FontWeight="Bold" Grid.Row="10" Margin="10"/>
+                    <TextBlock Name="revenueTextBlock" Margin="10" Grid.Row="10" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Score: " FontWeight="Bold" Grid.Row="11" Margin="10"/>
+                    <TextBlock Name="scoreTextBlock" Margin="10" Grid.Row="11" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Homepage: " FontWeight="Bold" Grid.Row="12" Margin="10"/>
+                    <HyperlinkButton Name="homePageLink" Margin="10" Grid.Row="12" Grid.Column="1" Content="{x:Bind Mdetail.homepage}"/>
+
+                    <TextBlock Text="Overview: " FontWeight="Bold" Grid.Row="13" Margin="10"/>
+                    <TextBlock Text="{x:Bind Mdetail.overview}" Margin="10" Grid.Row="13" Grid.Column="1" TextWrapping="Wrap"/>
                 </Grid>
 
-                <TextBlock Text="Data provided by Marvel. © 2015 Marvel" 
-                   VerticalAlignment="Center" 
-                   HorizontalAlignment="Center" 
-                   Grid.ColumnSpan="2" 
-                   Grid.Row="2" />
-
-                <ProgressRing Name="MyProgressRing"
-                      Width="100"
-                      Height="100"
-                      Foreground="Gray"
-                      Grid.ColumnSpan="2"
-                      Grid.RowSpan="3"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center" />
-
+                <TextBlock Text="Data provided by TMDB. © 2018 TMDB" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="6"
+                   Grid.ColumnSpan="2"/>
             </Grid>
         </ScrollViewer>
 

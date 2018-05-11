@@ -55,7 +55,54 @@ namespace PosterCollection
                     {
                         background = "Assets/defaultBackground.png";
                     }
-                    
+                    if(Mdetail.poster_path != null)
+                    {
+                        Mdetail.poster_path = "https://image.tmdb.org/t/p/w500" + Mdetail.poster_path;
+                    }
+                    else
+                    {
+                        Mdetail.poster_path = "Assets/defaultPoster.jpg";
+                    }
+                    productionCompaniesTextBlock.Text = "";
+                    foreach(var PCompany in Mdetail.production_companies)
+                    {
+                        productionCompaniesTextBlock.Text += PCompany.name + "\n";
+                    }
+                    productionCountriesTextBlock.Text = "";
+                    foreach(var PCountries in Mdetail.production_countries)
+                    {
+                        productionCountriesTextBlock.Text += PCountries.name + "\n";
+                    }
+                    genresTextBlock.Text = "";
+                    foreach(var genre in Mdetail.genres)
+                    {
+                        genresTextBlock.Text += " | " + genre.name;
+                    }
+                    genresTextBlock.Text = genresTextBlock.Text.Substring(3);
+                    spokenLanguageTextBlock.Text = "";
+                    foreach(var language in Mdetail.spoken_languages)
+                    {
+                        spokenLanguageTextBlock.Text += " | " + language.name;
+                    }
+                    spokenLanguageTextBlock.Text = spokenLanguageTextBlock.Text.Substring(3);
+                    scoreTextBlock.Text = Mdetail.vote_average + " points / " + Mdetail.vote_count + " participants";
+                    if (Mdetail.revenue != 0)
+                    {
+                        revenueTextBlock.Text = Mdetail.revenue + " dollars";
+                    }
+                    else
+                    {
+                        revenueTextBlock.Text = "Unknown";
+                    }
+                    if (Mdetail.budget != 0)
+                    {
+                        budgetTextBlock.Text = Mdetail.budget + " dollars";
+                    }
+                    else
+                    {
+                        budgetTextBlock.Text = "Unknown";
+                    }
+                    runtimeTextBlock.Text = Mdetail.runtime + " minutes";
                 }
                 else
                 {
