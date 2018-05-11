@@ -9,7 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
-//en
+
 namespace PosterCollection
 {
     /// <summary>
@@ -89,5 +89,9 @@ namespace PosterCollection
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(CollectorItems));
+        }
     }
 }

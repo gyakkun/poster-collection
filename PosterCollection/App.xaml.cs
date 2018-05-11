@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLitePCL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,8 +32,22 @@ namespace PosterCollection
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            conn = new SQLiteConnection(DB_NAME);
+
+
+            using (var statement = conn.Prepare(SQL_CREATE_TABLE))
+            {
+                statement.Step();
+            }
         }
 
+        static public SQLiteConnection conn { get; set; }
+        public static String DB_NAME = "Collectors.db";
+        public static String TABLE_NAME = "Collectors";
+        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),COMMENT VARCHAR(150));";
+        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,COMMENT) VALUES(?,?,?,?);";
+        public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;

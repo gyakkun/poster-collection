@@ -11,7 +11,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
         </Grid.Background>
-        
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="Wide">
@@ -50,7 +50,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- Detail Grid -->
                 <Image Name="PosterImage" Width="400" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top" Source="{x:Bind Mdetail.poster_path}"/>
                 <Grid Name="movieDetailGrid" Grid.Column="1">
@@ -122,6 +122,8 @@
                    HorizontalAlignment="Center"
                    Grid.Row="6"
                    Grid.ColumnSpan="2"/>
+
+                <Button Content="收藏" Grid.Row="5" Margin="120,10,0,-53" Width="154" Height="75" Click="Button_Click"/>
             </Grid>
         </ScrollViewer>
 

@@ -17,5 +17,6 @@
             <AutoSuggestBox Name="Search" Width="250" Height="Auto"/>
             <AppBarButton Name="SearchButton" Icon="Find" Click="SearchButton_Click"/>
         </StackPanel>
+        <Button Content="collections" Click="Button_Click"/>
     </Grid>
 </Page>

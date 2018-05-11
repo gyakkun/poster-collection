@@ -31,6 +31,7 @@ namespace PosterCollection
         private string background;
         private MovieDetail Mdetail;
         private TVDetail Tdetail;
+        private Star mystar;
         public DetailPage()
         {
             this.InitializeComponent();
@@ -118,6 +119,15 @@ namespace PosterCollection
                 }
             }
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            mystar = new Star(Mdetail.id, Mdetail.title, background, "");
+          
+
+            viewModel.AddStar(mystar);
+            Frame.Navigate(typeof(MainPage), 0);
         }
     }
 }
