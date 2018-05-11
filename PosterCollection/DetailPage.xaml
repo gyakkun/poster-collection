@@ -5,8 +5,23 @@
     xmlns:local="using:PosterCollection"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:PosterCollection.Models"
     mc:Ignorable="d">
-
+    
+    <Page.Resources>
+        <DataTemplate x:DataType="data:Cast" x:Key="MovieCharacterDataTemplate">
+            <StackPanel HorizontalAlignment="Center">
+                <Ellipse Width="100" Height="100" Margin="5">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{x:Bind profile_path}" />
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock FontSize="16" Margin="0,0,0,5" Text="{x:Bind name}" TextWrapping="Wrap" HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    
+    
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
@@ -21,6 +36,9 @@
                     <VisualState.Setters>
                         <Setter Target="movieDetailGrid.(Grid.Row)" Value="0" />
                         <Setter Target="movieDetailGrid.(Grid.Column)" Value="1" />
+
+                        <Setter Target="starGridView.(Grid.Row)" Value="1"/>
+                        <Setter Target="starGridView.(Grid.Column)" Value="1"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -31,6 +49,10 @@
                         <Setter Target="movieDetailGrid.(Grid.Row)" Value="1" />
                         <Setter Target="movieDetailGrid.(Grid.Column)" Value="0" />
                         <Setter Target="movieDetailGrid.(Grid.ColumnSpan)" Value="2"/>
+
+                        <Setter Target="starGridView.(Grid.Row)" Value="2"/>
+                        <Setter Target="starGridView.(Grid.Column)" Value="0"/>
+                        <Setter Target="starGridView.(Grid.ColumnSpan)" Value="2"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -39,6 +61,7 @@
         <ScrollViewer>
             <Grid Margin="15">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -116,6 +139,13 @@
                     <TextBlock Text="Overview: " FontWeight="Bold" Grid.Row="13" Margin="10"/>
                     <TextBlock Text="{x:Bind Mdetail.overview}" Margin="10" Grid.Row="13" Grid.Column="1" TextWrapping="Wrap"/>
                 </Grid>
+                <!-- Star GridView -->
+                <GridView Name="starGridView" Header="Actors(Voice Actors): " FontWeight="Bold" Grid.Column="1" Grid.Row="1" ItemsSource="{x:Bind Mdetail.casts.cast}" 
+                      IsItemClickEnabled="True"
+                      ItemClick="GridView_StarItemClick"
+                      ItemTemplate="{StaticResource MovieCharacterDataTemplate}"
+                      >
+                </GridView>
 
                 <TextBlock Text="Data provided by TMDB. © 2018 TMDB" 
                    VerticalAlignment="Center"

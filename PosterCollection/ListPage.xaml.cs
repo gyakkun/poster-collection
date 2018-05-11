@@ -42,20 +42,28 @@ namespace PosterCollection
 
         private async void GridView_MovieItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = (MovieResult)e.ClickedItem;
-            String url = String.Format("https://api.themoviedb.org/3/movie/{0}?api_key=7888f0042a366f63289ff571b68b7ce0", item.id);
-            HttpClient client = new HttpClient();
-            String Jresult = await client.GetStringAsync(url);
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(MovieDetail));
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
-            viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
-            this.Frame.Navigate(typeof(DetailPage), 0);
+            try
+            {
+                var item = (MovieResult)e.ClickedItem;
+                String url = String.Format("https://api.themoviedb.org/3/movie/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
+                HttpClient client = new HttpClient();
+                String Jresult = await client.GetStringAsync(url);
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(MovieDetail));
+                MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+                viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
+                this.Frame.Navigate(typeof(DetailPage), 0);
+            }
+            catch
+            {
+                await new Windows.UI.Popups.MessageDialog("Opps! This item cannot be serialized, please try another item! ").ShowAsync();
+            }
+            
         }
 
         private async void GridView_TVItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (TVResult)e.ClickedItem;
-            String url = String.Format("https://api.themoviedb.org/3/tv/{0}?api_key=7888f0042a366f63289ff571b68b7ce0", item.id);
+            String url = String.Format("https://api.themoviedb.org/3/tv/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
             HttpClient client = new HttpClient();
             String Jresult = await client.GetStringAsync(url);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TVDetail));
