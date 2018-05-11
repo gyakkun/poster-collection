@@ -10,8 +10,10 @@ namespace PosterCollection.ViewModels
 {
     class ViewModel
     {
-        private ObservableCollection<Result> queryResults = new ObservableCollection<Result>();
-        private PosterDetail detail;
+        private ObservableCollection<MovieResult> queryMovieResults = new ObservableCollection<MovieResult>();
+        private ObservableCollection<TVResult> queryTVResults = new ObservableCollection<TVResult>();
+        private MovieDetail theMovieDetail = new MovieDetail();
+        private TVDetail theTVDetail = new TVDetail();
 
         private static ViewModel instance;
 
@@ -27,21 +29,44 @@ namespace PosterCollection.ViewModels
             }
         }
 
-        public ObservableCollection<Result> QueryResults
+        public ObservableCollection<MovieResult> QueryMovieResults
         {
-            get { return queryResults; }
-            set { queryResults = value; }
+            get { return queryMovieResults; }
+            set { queryMovieResults = value; }
         }
 
-        public PosterDetail Detail
+        public ObservableCollection<TVResult> QueryTVResults
         {
-            get { return detail; }
-            set { detail = value; }
+            get { return queryTVResults; }
+            set { queryTVResults = value; }
         }
 
-        public void AddResult(Result result)
+        public MovieDetail TheMovieDetail
         {
-            queryResults.Add(result);
+            get { return theMovieDetail; }
+            set { theMovieDetail = value; }
+        }
+
+        public TVDetail TheTVDetail
+        {
+            get { return theTVDetail; }
+            set { theTVDetail = value; }
+        }
+
+        public void AddMovieResult(MovieResult result)
+        {
+            queryMovieResults.Add(result);
+        }
+
+        public void AddTVResult(TVResult result)
+        {
+            queryTVResults.Add(result);
+        }
+
+        public void clear()
+        {
+            queryMovieResults.Clear();
+            queryTVResults.Clear();
         }
     }
 }

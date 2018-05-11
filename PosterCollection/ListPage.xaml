@@ -7,28 +7,49 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:PosterCollection.Models"
     mc:Ignorable="d">
-
+    
     <Page.Resources>
-        <DataTemplate x:DataType="data:Result" x:Key="ResultDataTemplate">
+        <DataTemplate x:DataType="data:MovieResult" x:Key="MovieResultDataTemplate">
             <StackPanel HorizontalAlignment="Center">
-                <Image Width="200" Source="{x:Bind poster_path}" />
-                <TextBlock FontSize="16" Text="{x:Bind title}" HorizontalAlignment="Center" />
+                <Image Height="300" Source="{x:Bind poster_path}" Margin="5"/>
+                <TextBlock FontSize="16" Margin="0,0,0,5" Text="{x:Bind title}" TextWrapping="Wrap" HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:DataType="data:TVResult" x:Key="TVResultDataTemplate">
+            <StackPanel HorizontalAlignment="Center">
+                <Image Height="300" Source="{x:Bind poster_path}" Margin="5"/>
+                <TextBlock FontSize="16" Margin="0,0,0,5" Text="{x:Bind name}" TextWrapping="Wrap" HorizontalAlignment="Center" />
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="20">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="20" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Search Results: " FontWeight="Bold" FontSize="32" FontFamily="Microsoft YaHei" Margin="10" HorizontalAlignment="Left"/>
-
-        <GridView ItemsSource="{x:Bind viewModel.QueryResults}" 
-                  IsItemClickEnabled="True" 
-                  ItemClick="GridView_ItemClick"
-                  ItemTemplate="{StaticResource ResultDataTemplate}"
-                  Grid.Row="1">
-        </GridView>
+        <TextBlock Text="Search Results" FontWeight="Bold" FontSize="32" FontFamily="Microsoft YaHei" Margin="10" HorizontalAlignment="Center"/>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock FontFamily="Microsoft YaHei" FontSize="24">Movie Results:</TextBlock>
+                    <GridView ItemsSource="{x:Bind viewModel.QueryMovieResults}" 
+                      IsItemClickEnabled="True" 
+                      ItemClick="GridView_MovieItemClick"
+                      ItemTemplate="{StaticResource MovieResultDataTemplate}"
+                      >
+                    </GridView>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock FontFamily="Microsoft YaHei" FontSize="24">TV Results:</TextBlock>
+                    <GridView ItemsSource="{x:Bind viewModel.QueryTVResults}" 
+                      IsItemClickEnabled="True" 
+                      ItemClick="GridView_TVItemClick"
+                      ItemTemplate="{StaticResource TVResultDataTemplate}"
+                      >
+                    </GridView>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
