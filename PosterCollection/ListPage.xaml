@@ -26,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Search Results" FontWeight="Bold" FontSize="32" FontFamily="Microsoft YaHei" Margin="10" HorizontalAlignment="Center"/>
@@ -51,5 +52,9 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
+        <TextBlock Text="Data provided by TMDB. © 2018 TMDB" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="2"/>
     </Grid>
 </Page>

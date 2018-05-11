@@ -29,6 +29,7 @@ namespace PosterCollection
     {
         private ViewModel viewModel;
         private string background;
+        private string starPhoto;
         private MovieDetail Mdetail;
         private TVDetail Tdetail;
         public DetailPage()
@@ -78,13 +79,27 @@ namespace PosterCollection
                     {
                         genresTextBlock.Text += " | " + genre.name;
                     }
-                    genresTextBlock.Text = genresTextBlock.Text.Substring(3);
+                    if (genresTextBlock.Text != "")
+                    {
+                        genresTextBlock.Text = genresTextBlock.Text.Substring(3);
+                    }
+                    else
+                    {
+                        genresTextBlock.Text = "Unkonwn";
+                    }
                     spokenLanguageTextBlock.Text = "";
                     foreach(var language in Mdetail.spoken_languages)
                     {
                         spokenLanguageTextBlock.Text += " | " + language.name;
                     }
-                    spokenLanguageTextBlock.Text = spokenLanguageTextBlock.Text.Substring(3);
+                    if (spokenLanguageTextBlock.Text != "")
+                    {
+                        spokenLanguageTextBlock.Text = spokenLanguageTextBlock.Text.Substring(3);
+                    }
+                    else
+                    {
+                        spokenLanguageTextBlock.Text = "Unkonwn";
+                    }
                     scoreTextBlock.Text = Mdetail.vote_average + " points / " + Mdetail.vote_count + " participants";
                     if (Mdetail.revenue != 0)
                     {
@@ -103,6 +118,19 @@ namespace PosterCollection
                         budgetTextBlock.Text = "Unknown";
                     }
                     runtimeTextBlock.Text = Mdetail.runtime + " minutes";
+
+                    foreach(var cast in Mdetail.casts.cast)
+                    {
+                        if(cast.profile_path != null)
+                        {
+                            cast.profile_path = "https://image.tmdb.org/t/p/w500" + cast.profile_path;
+                        }
+                        else
+                        {
+                            cast.profile_path = "Assets/defaultPhoto.jpg";
+                        }
+                    }
+
                 }
                 else
                 {
@@ -118,6 +146,11 @@ namespace PosterCollection
                 }
             }
             
+        }
+
+        private void GridView_StarItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }

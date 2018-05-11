@@ -25,10 +25,18 @@ namespace PosterCollection.Models
         public int season_number { get; set; }
     }
 
+    public class CreatedBy
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public int gender { get; set; }
+        public object profile_path { get; set; }
+    }
+
     public class TVDetail
     {
         public string backdrop_path { get; set; }
-        public List<object> created_by { get; set; }
+        public List<CreatedBy> created_by { get; set; }
         public List<int> episode_run_time { get; set; }
         public string first_air_date { get; set; }
         public List<Genre> genres { get; set; }
