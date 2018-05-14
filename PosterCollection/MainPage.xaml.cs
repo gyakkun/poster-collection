@@ -23,12 +23,32 @@ namespace PosterCollection
         public MainPage()
         {
             this.InitializeComponent();
+            //Show the waiting ring.
+            //MyProgressRing.IsActive = true;
+            //MyProgressRing.Visibility = Visibility.Visible;
             viewModel = ViewModel.Instance;
             InitializeList();
+
+
+            //Kill the waiting ring.
+            //MyProgressRing.IsActive = false;
+            //MyProgressRing.Visibility = Visibility.Collapsed;
         }
+
+        //private  void showProgressRing() {
+        //    MyProgressRing.IsActive = true;
+        //    MyProgressRing.Visibility = Visibility.Visible;
+        //}
+
+        //private  void killProgressRing() {
+        //    MyProgressRing.IsActive = false;
+        //    MyProgressRing.Visibility = Visibility.Collapsed;
+        //}
 
         private async void InitializeList()
         {
+
+
             try
             {
                 if (VideoTypeComboBox.SelectedIndex == 0)
@@ -98,7 +118,9 @@ namespace PosterCollection
             {
                 await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
             }
+
         }
+
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
@@ -121,9 +143,11 @@ namespace PosterCollection
         {
             if (Search.Text != "")
             {
-                
-                try
-                {
+                //Show the waiting ring.
+                MyProgressRing.IsActive = true;
+                MyProgressRing.Visibility = Visibility.Visible;
+
+                try {
                     viewModel.clear();
                     for (int i = 1; i <= 5; i++)
                     {
@@ -180,11 +204,17 @@ namespace PosterCollection
                 {
                     await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
                 }
+
+                //Kill the waiting ring.
+                MyProgressRing.IsActive = false;
+                MyProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
                 await new Windows.UI.Popups.MessageDialog("Please enter key words first! ").ShowAsync();
             }
+
+
         }
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
