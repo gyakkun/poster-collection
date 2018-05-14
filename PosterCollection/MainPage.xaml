@@ -8,14 +8,62 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="Assets/Background.jpg"/>
-        </Grid.Background>
-        <TextBlock Text="Poster Collection" FontFamily="Microssoft YaHei" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Key Words: " FontFamily="Microssoft YaHei" FontSize="24" Margin="0,0,10,0"/>
-            <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
-            <AppBarButton Name="SearchButton" Height="32" Icon="Find" Click="SearchButton_Click"/>
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <RelativePanel>
+                <Button Name="HamburgerButton" 
+                    RelativePanel.AlignLeftWithPanel="True"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="36" 
+                    Content="&#xE700;" 
+                    Click="HamburgerButton_Click" />
+
+                <TextBlock Name="TitleTextBlock"
+                       RelativePanel.RightOf="HamburgerButton"
+                       Text="Poster Collection"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Margin="20,5,0,0"/>
+
+                <StackPanel RelativePanel.AlignRightWithPanel="True" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
+                    <AppBarButton Name="SearchButton" Height="32" Icon="Find" Click="SearchButton_Click"/>
+                </StackPanel>
+                
+            </RelativePanel>
+
+            <SplitView Grid.Row="1" 
+                   Name="MySplitView"
+                   DisplayMode="CompactOverlay" 
+                   OpenPaneLength="200" 
+                   CompactPaneLength="56">
+                <SplitView.Pane>
+                    <ListBox SelectionMode="Single" 
+                         SelectionChanged="ListBox_SelectionChanged">
+                        <ListBoxItem Name="Home">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE80F;" />
+                                <TextBlock FontSize="24" Margin="20,0,0,0">Home</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="Collection">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE1CE;" />
+                                <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <Frame Name="MyFrame"></Frame>
+                </SplitView.Content>
+
+            </SplitView>
+
+        </Grid>
     </Grid>
 </Page>

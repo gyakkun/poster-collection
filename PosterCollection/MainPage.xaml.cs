@@ -88,6 +88,14 @@ namespace PosterCollection
                 await new Windows.UI.Popups.MessageDialog("Please enter key words first! ").ShowAsync();
             }
         }
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
 
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
