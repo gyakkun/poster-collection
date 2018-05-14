@@ -7,11 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid>
+    <Grid Background="SkyBlue">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <RelativePanel>
@@ -24,16 +24,16 @@
 
                 <TextBlock Name="TitleTextBlock"
                        RelativePanel.RightOf="HamburgerButton"
-                       Text="Poster Collection"
+                       Text="Home"
                        FontSize="28"
                        FontWeight="Bold"
                        Margin="20,5,0,0"/>
 
-                <StackPanel RelativePanel.AlignRightWithPanel="True" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="10" RelativePanel.AlignRightWithPanel="True">
                     <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
                     <AppBarButton Name="SearchButton" Height="32" Icon="Find" Click="SearchButton_Click"/>
                 </StackPanel>
-                
+
             </RelativePanel>
 
             <SplitView Grid.Row="1" 
@@ -43,6 +43,7 @@
                    CompactPaneLength="56">
                 <SplitView.Pane>
                     <ListBox SelectionMode="Single" 
+                         SelectedIndex="0"
                          SelectionChanged="ListBox_SelectionChanged">
                         <ListBoxItem Name="Home">
                             <StackPanel Orientation="Horizontal">
@@ -59,11 +60,108 @@
                     </ListBox>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <Frame Name="MyFrame"></Frame>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" Margin="10">
+                            <TextBlock Text="Video Type: " Margin="5"/>
+                            <ComboBox Name="VideoTypeComboBox" SelectionChanged="VideoTypeComboBox_SelectionChanged" SelectedIndex="0">
+
+                                <ComboBoxItem Content="Movie"/>
+                                <ComboBoxItem Content="TV"/>
+                                
+                            </ComboBox>
+                            
+                            <TextBlock Text="Language: " Margin="5"/>
+                            <ComboBox Name="LanguageComboBox" SelectionChanged="LanguageComboBox_SelectionChanged" SelectedIndex="0">
+
+                                <ComboBoxItem Content="All"/>
+                                <ComboBoxItem Content="English"/>
+                                <ComboBoxItem Content="Mandarin"/>
+                                <ComboBoxItem Content="Japanese"/>
+                                <ComboBoxItem Content="Korean"/>
+                                <ComboBoxItem Content="Other"/>
+                            </ComboBox>
+                            <TextBlock Text="Movie Genre: " Margin="5"/>
+                            <ComboBox Name="movieGenreComboBox" SelectionChanged="movieGenreComboBox_SelectionChanged" SelectedIndex="0">
+                                <ComboBoxItem Content="All"/>
+                                <ComboBoxItem Content="Action"/>
+                                <ComboBoxItem Content="Adventure"/>
+                                <ComboBoxItem Content="Animation"/>
+                                <ComboBoxItem Content="Comedy"/>
+                                <ComboBoxItem Content="Crime"/>
+                                <ComboBoxItem Content="Documentary"/>
+                                <ComboBoxItem Content="Drama"/>
+                                <ComboBoxItem Content="Family"/>
+                                <ComboBoxItem Content="Fantasy"/>
+                                <ComboBoxItem Content="History"/>
+                                <ComboBoxItem Content="Horror"/>
+                                <ComboBoxItem Content="Music"/>
+                                <ComboBoxItem Content="Mystery"/>
+                                <ComboBoxItem Content="Romance"/>
+                                <ComboBoxItem Content="Science Fiction"/>
+                                <ComboBoxItem Content="TV Movie"/>
+                                <ComboBoxItem Content="Thriller"/>
+                                <ComboBoxItem Content="War"/>
+                                <ComboBoxItem Content="Western"/>
+                            </ComboBox>
+                            <TextBlock Text="TV Genre: " Margin="5"/>
+                            <ComboBox Name="tvGenreComboBox" SelectedIndex="0">
+                                <ComboBoxItem Content="All"/>
+                                <ComboBoxItem Content="Action/Adventure" />
+                                <ComboBoxItem Content="Animation"/>
+                                <ComboBoxItem Content="Comedy"/>
+                                <ComboBoxItem Content="Crime"/>
+                                <ComboBoxItem Content="Documentary"/>
+                                <ComboBoxItem Content="Drama"/>
+                                <ComboBoxItem Content="Family"/>
+                                <ComboBoxItem Content="Kids"/>
+                                <ComboBoxItem Content="Mystery"/>
+                                <ComboBoxItem Content="News"/>
+                                <ComboBoxItem Content="Reality"/>
+                                <ComboBoxItem Content="Sci-Fi/Fantasy"/>
+                                <ComboBoxItem Content="Soap"/>
+                                <ComboBoxItem Content="Talk"/>
+                                <ComboBoxItem Content="War/Politics"/>
+                                <ComboBoxItem Content="Western"/>
+                            </ComboBox>
+                            <TextBlock Text="Release Year: " Margin="5"/>
+                            <ComboBox Name="ReleaseYearComboBox" SelectedIndex="0">
+                                <ComboBoxItem Content="All"/>
+                                <ComboBoxItem Content="2018"/>
+                                <ComboBoxItem Content="2017"/>
+                                <ComboBoxItem Content="2016"/>
+                                <ComboBoxItem Content="2015"/>
+                                <ComboBoxItem Content="2014"/>
+                                <ComboBoxItem Content="2013"/>
+                                <ComboBoxItem Content="2012"/>
+                                <ComboBoxItem Content="2011"/>
+                                <ComboBoxItem Content="2010"/>
+                                <ComboBoxItem Content="Before 2010"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Sort By: " Margin="5"/>
+                            <ComboBox Name="SortByComboBox" SelectedIndex="0">
+
+                                <ComboBoxItem Content="Popularity"/>
+                                <ComboBoxItem Content="Vote Average"/>
+
+                            </ComboBox>
+                        </StackPanel>
+                        <Frame Name="ListFrame" Grid.Row="1"/>
+                    </Grid>
                 </SplitView.Content>
 
             </SplitView>
-
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="Previous Page" Margin="10"/>
+            <AppBarButton Icon="Previous"/>
+            <AppBarButton Icon="Next"/>
+            <TextBlock Text="Next Page" Margin="10"/>
+        </StackPanel>
         </Grid>
-    </Grid>
+
 </Page>

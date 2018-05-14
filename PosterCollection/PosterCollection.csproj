@@ -118,7 +118,6 @@
     <None Include="PosterCollection_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\background.jpg" />
     <Content Include="Assets\defaultBackground.png" />
     <Content Include="Assets\defaultPhoto.jpg" />
     <Content Include="Assets\defaultPoster.jpg" />

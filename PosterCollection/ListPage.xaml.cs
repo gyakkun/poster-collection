@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PosterCollection.ViewModels;
@@ -17,6 +9,7 @@ using PosterCollection.Models;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Windows.UI.Xaml.Media.Imaging;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -38,6 +31,28 @@ namespace PosterCollection
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             viewModel = ViewModel.Instance;
+            if (e.Parameter is int)
+            {
+                int flag = (int)e.Parameter;
+                if (flag == 0)
+                {
+                    searchGrid.Visibility = Visibility.Collapsed;
+                    TVPanel.Visibility = Visibility.Collapsed;
+                    movieTextBlock.Visibility = Visibility.Collapsed;
+                }
+                else if(flag == 1)
+                {
+                    searchGrid.Visibility = Visibility.Collapsed;
+                    MoviePanel.Visibility = Visibility.Collapsed;
+                    tvTextBlock.Visibility = Visibility.Collapsed;
+                }
+                else if(flag == 2)
+                {
+                    ImageBrush background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri(this.BaseUri, "Assets/defaultBackground.png"));
+                    listGrid.Background = background;
+                }
+            }
         }
 
         private async void GridView_MovieItemClick(object sender, ItemClickEventArgs e)
@@ -77,6 +92,7 @@ namespace PosterCollection
                 await new Windows.UI.Popups.MessageDialog("Opps! This item cannot be serialized, please try another item! ").ShowAsync();
             }
         }
+                
 
         private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
