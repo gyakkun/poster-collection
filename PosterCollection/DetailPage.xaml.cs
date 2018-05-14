@@ -29,7 +29,6 @@ namespace PosterCollection
     {
         private ViewModel viewModel;
         private string background;
-        private string starPhoto;
         private MovieDetail Mdetail;
         private TVDetail Tdetail;
         public DetailPage()
@@ -47,6 +46,9 @@ namespace PosterCollection
                 int flag = (int)e.Parameter;
                 if (flag == 0)
                 {
+                    tvDetailGrid.Visibility = Visibility.Collapsed;
+                    tvPosterImage.Visibility = Visibility.Collapsed;
+
                     Mdetail = viewModel.TheMovieDetail;
                     if(Mdetail.backdrop_path != null)
                     {
@@ -69,10 +71,18 @@ namespace PosterCollection
                     {
                         productionCompaniesTextBlock.Text += PCompany.name + "\n";
                     }
+                    if (productionCompaniesTextBlock.Text == "")
+                    {
+                        productionCompaniesTextBlock.Text = "Unknown";
+                    }
                     productionCountriesTextBlock.Text = "";
                     foreach(var PCountries in Mdetail.production_countries)
                     {
                         productionCountriesTextBlock.Text += PCountries.name + "\n";
+                    }
+                    if(productionCountriesTextBlock.Text == "")
+                    {
+                        productionCountriesTextBlock.Text = "Unknown";
                     }
                     genresTextBlock.Text = "";
                     foreach(var genre in Mdetail.genres)
@@ -98,7 +108,7 @@ namespace PosterCollection
                     }
                     else
                     {
-                        spokenLanguageTextBlock.Text = "Unkonwn";
+                        spokenLanguageTextBlock.Text = Mdetail.original_language;
                     }
                     scoreTextBlock.Text = Mdetail.vote_average + " points / " + Mdetail.vote_count + " participants";
                     if (Mdetail.revenue != 0)
@@ -134,6 +144,9 @@ namespace PosterCollection
                 }
                 else
                 {
+                    movieDetailGrid.Visibility = Visibility.Collapsed;
+                    moviePosterImage.Visibility = Visibility.Collapsed;
+
                     Tdetail = viewModel.TheTVDetail;
                     if (Tdetail.backdrop_path != null)
                     {
@@ -143,14 +156,118 @@ namespace PosterCollection
                     {
                         background = "Assets/defaultBackground.png";
                     }
+                    if (Tdetail.poster_path != null)
+                    {
+                        Tdetail.poster_path = "https://image.tmdb.org/t/p/w500" + Tdetail.poster_path;
+                    }
+                    else
+                    {
+                        Tdetail.poster_path = "Assets/defaultPoster.jpg";
+                    }
+                    originalCountriesText.Text = "";
+                    foreach(var country in Tdetail.origin_country)
+                    {
+                        originalCountriesText.Text += country + "\n";
+                    }
+                    if(originalCountriesText.Text == "")
+                    {
+                        originalCountriesText.Text = "Unknown";
+                    }
+                    productionCompaniesText.Text = "";
+                    foreach (var PCompany in Tdetail.production_companies)
+                    {
+                        productionCompaniesText.Text += PCompany.name + "\n";
+                    }
+                    if(productionCompaniesText.Text == "")
+                    {
+                        productionCompaniesText.Text = "Unknown";
+                    }
+                    genresTextBlock.Text = "";
+                    foreach (var genre in Tdetail.genres)
+                    {
+                        genresText.Text += " | " + genre.name;
+                    }
+                    if (genresText.Text != "")
+                    {
+                        genresText.Text = genresText.Text.Substring(3);
+                    }
+                    else
+                    {
+                        genresText.Text = "Unkonwn";
+                    }
+                    LanguageText.Text = "";
+                    foreach (var language in Tdetail.languages)
+                    {
+                        LanguageText.Text += " | " + language;
+                    }
+                    if (LanguageText.Text != "")
+                    {
+                        LanguageText.Text = LanguageText.Text.Substring(3);
+                    }
+                    else
+                    {
+                        LanguageText.Text = Tdetail.original_language;
+                    }
+                    scoreText.Text = Tdetail.vote_average + " points / " + Tdetail.vote_count + " participants";
+
+                    foreach (var season in Tdetail.seasons)
+                    {
+                        if (season.poster_path != null)
+                        {
+                            season.poster_path = "https://image.tmdb.org/t/p/w500" + season.poster_path;
+                        }
+                        else
+                        {
+                            season.poster_path = "Assets/defaultPoster.jpg";
+                        }
+                    }
+                    createText.Text = "";
+                    foreach(var creator in Tdetail.created_by)
+                    {
+                        createText.Text += creator.name + "\n";
+                    }
+                    if(createText.Text == "")
+                    {
+                        createText.Text = "Unknown";
+                    }
                 }
             }
             
         }
 
-        private void GridView_StarItemClick(object sender, ItemClickEventArgs e)
+        private async void seasonsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var item = (Season)e.ClickedItem;
+            string message = "Season Name:\t" + item.name + "\n\n" +
+                             "Episode count:\t" + item.episode_count + "\n\n" +
+                             "Air Date:\t" + item.air_date + "\n\n";
 
+            if (item.overview != null && item.overview != "")
+            {
+                message += "Overview:\n\n" + item.overview + "\n";
+            }
+            await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
+        }
+
+        private async void starGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = (Cast)e.ClickedItem;
+            string message = "Name:\t\t" + item.name + "\n\n";
+            message += "Character:\t" + item.character + "\n";
+
+            await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
+        }
+
+        private void collect_Click(object sender, RoutedEventArgs e)
+        {
+            collect.Visibility = Visibility.Collapsed;
+            collected.Visibility = Visibility.Visible;
+        }
+
+        private void collected_Click(object sender, RoutedEventArgs e)
+        {
+            collect.Visibility = Visibility.Visible;
+            collected.Visibility = Visibility.Collapsed;
         }
     }
 }

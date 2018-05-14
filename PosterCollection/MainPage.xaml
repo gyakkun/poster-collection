@@ -14,8 +14,8 @@
         <TextBlock Text="Poster Collection" FontFamily="Microssoft YaHei" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Key Words: " FontFamily="Microssoft YaHei" FontSize="24" Margin="0,0,10,0"/>
-            <AutoSuggestBox Name="Search" Width="250" Height="Auto"/>
-            <AppBarButton Name="SearchButton" Icon="Find" Click="SearchButton_Click"/>
+            <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
+            <AppBarButton Name="SearchButton" Height="32" Icon="Find" Click="SearchButton_Click"/>
         </StackPanel>
     </Grid>
 </Page>

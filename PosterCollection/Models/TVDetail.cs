@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace PosterCollection.Models
 {
+    public class CreatedBy
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public int gender { get; set; }
+        public string profile_path { get; set; }
+    }
+
     public class Network
     {
         public string name { get; set; }
@@ -23,14 +31,6 @@ namespace PosterCollection.Models
         public string overview { get; set; }
         public string poster_path { get; set; }
         public int season_number { get; set; }
-    }
-
-    public class CreatedBy
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int gender { get; set; }
-        public object profile_path { get; set; }
     }
 
     public class TVDetail
@@ -55,7 +55,7 @@ namespace PosterCollection.Models
         public string overview { get; set; }
         public double popularity { get; set; }
         public string poster_path { get; set; }
-        public List<object> production_companies { get; set; }
+        public List<ProductionCompany> production_companies { get; set; }
         public List<Season> seasons { get; set; }
         public string status { get; set; }
         public string type { get; set; }
