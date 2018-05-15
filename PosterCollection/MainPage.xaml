@@ -21,13 +21,13 @@
                     FontSize="36" 
                     Content="&#xE700;" 
                     Click="HamburgerButton_Click" />
-
-                <TextBlock Name="TitleTextBlock"
-                       RelativePanel.RightOf="HamburgerButton"
+            <AppBarButton Icon="Back" Name="BackAppBarButton" Visibility="Collapsed" Margin="5" RelativePanel.RightOf="HamburgerButton" Width="40" Height="40" Click="BackAppBarButton_Click"/>
+            <TextBlock Name="TitleTextBlock"
+                       RelativePanel.RightOf="BackAppBarButton"
                        Text="Home"
                        FontSize="28"
                        FontWeight="Bold"
-                       Margin="20,5,0,0"/>
+                       Margin="10,5,0,0"/>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="10" RelativePanel.AlignRightWithPanel="True">
                     <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
@@ -43,7 +43,6 @@
                    CompactPaneLength="56">
                 <SplitView.Pane>
                     <ListBox SelectionMode="Single" 
-                         SelectedIndex="0"
                          SelectionChanged="ListBox_SelectionChanged">
                         <ListBoxItem Name="Home">
                             <StackPanel Orientation="Horizontal">
@@ -51,13 +50,13 @@
                                 <TextBlock FontSize="24" Margin="20,0,0,0">Home</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
-                        <ListBoxItem Name="Collection">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE1CE;" />
-                                <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
-                            </StackPanel>
-                        </ListBoxItem>
-                    </ListBox>
+                    <ListBoxItem Name="Collection">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE1CE;" />
+                            <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
@@ -67,6 +66,9 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" Margin="10">
+
+                           
+
                             <TextBlock Text="Video Type: " Margin="5"/>
                             <ComboBox Name="VideoTypeComboBox" SelectionChanged="VideoTypeComboBox_SelectionChanged" SelectedIndex="0">
 
@@ -77,15 +79,13 @@
                             
                             <TextBlock Text="Language: " Margin="5"/>
                             <ComboBox Name="LanguageComboBox" SelectionChanged="LanguageComboBox_SelectionChanged" SelectedIndex="0">
-
                                 <ComboBoxItem Content="All"/>
                                 <ComboBoxItem Content="English"/>
                                 <ComboBoxItem Content="Mandarin"/>
                                 <ComboBoxItem Content="Japanese"/>
-                                <ComboBoxItem Content="Korean"/>
-                                <ComboBoxItem Content="Other"/>
+                                <ComboBoxItem Content="German"/>
                             </ComboBox>
-                            <TextBlock Text="Movie Genre: " Margin="5"/>
+                            <TextBlock Name="movieGenreTextBlock" Text="Movie Genre: " Margin="5"/>
                             <ComboBox Name="movieGenreComboBox" SelectionChanged="movieGenreComboBox_SelectionChanged" SelectedIndex="0">
                                 <ComboBoxItem Content="All"/>
                                 <ComboBoxItem Content="Action"/>
@@ -108,8 +108,8 @@
                                 <ComboBoxItem Content="War"/>
                                 <ComboBoxItem Content="Western"/>
                             </ComboBox>
-                            <TextBlock Text="TV Genre: " Margin="5"/>
-                            <ComboBox Name="tvGenreComboBox" SelectedIndex="0">
+                            <TextBlock Name="tvGenreTextBlock" Text="TV Genre: " Visibility="Collapsed" Margin="5"/>
+                            <ComboBox Name="tvGenreComboBox" SelectionChanged="tvGenreComboBox_SelectionChanged" Visibility="Collapsed" SelectedIndex="0">
                                 <ComboBoxItem Content="All"/>
                                 <ComboBoxItem Content="Action/Adventure" />
                                 <ComboBoxItem Content="Animation"/>
@@ -128,8 +128,8 @@
                                 <ComboBoxItem Content="War/Politics"/>
                                 <ComboBoxItem Content="Western"/>
                             </ComboBox>
-                            <TextBlock Text="Release Year: " Margin="5"/>
-                            <ComboBox Name="ReleaseYearComboBox" SelectedIndex="0">
+                            <TextBlock Name="ReleaseYearTextBlock" Text="Release Year: " Margin="5"/>
+                            <ComboBox Name="ReleaseYearComboBox" SelectionChanged="ReleaseYearComboBox_SelectionChanged" SelectedIndex="0">
                                 <ComboBoxItem Content="All"/>
                                 <ComboBoxItem Content="2018"/>
                                 <ComboBoxItem Content="2017"/>
@@ -144,24 +144,23 @@
                             </ComboBox>
 
                             <TextBlock Text="Sort By: " Margin="5"/>
-                            <ComboBox Name="SortByComboBox" SelectedIndex="0">
+                            <ComboBox Name="SortByComboBox" SelectionChanged="SortByComboBox_SelectionChanged" SelectedIndex="0">
 
                                 <ComboBoxItem Content="Popularity"/>
                                 <ComboBoxItem Content="Vote Average"/>
 
                             </ComboBox>
                         </StackPanel>
-                        <Frame Name="ListFrame" Grid.Row="1"/>
-                    </Grid>
+                        <Frame Name="ListFrame" Grid.Row="1" Navigated="ListFrame_Navigated"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Name="pageChangePanel" HorizontalAlignment="Right">
+                        <AppBarButton Icon="Previous" Name="PreviousAppBarButton" Click="PreviousAppBarButton_Click" Label="Previous"/>
+                        <AppBarButton Icon="Next" Name="NextAppBarButton" Click="NextAppBarButton_Click" Label="Next"/>
+                    </StackPanel>
+                </Grid>
                 </SplitView.Content>
 
             </SplitView>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock Text="Previous Page" Margin="10"/>
-            <AppBarButton Icon="Previous"/>
-            <AppBarButton Icon="Next"/>
-            <TextBlock Text="Next Page" Margin="10"/>
-        </StackPanel>
+        
         </Grid>
 
 </Page>
