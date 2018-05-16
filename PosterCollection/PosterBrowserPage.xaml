@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="PosterCollection.PosterBrowserPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PosterCollection"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:PosterCollection.Models"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:DataType="data:Poster" x:Key="PostersDataTemplate">
+            <Image Height="500" Source="{x:Bind file_path}" Margin="5"/>
+        </DataTemplate>
+        <DataTemplate x:DataType="data:Backdrop" x:Key="BackdropsDataTemplate">
+            <Image Width="450" Source="{x:Bind file_path}" Margin="5"/>
+        </DataTemplate>
+    </Page.Resources>
+    <ScrollViewer>
+        <Grid Background="SkyBlue">
+            <StackPanel>
+                <TextBlock Text="Posters: " Name="posterTextBlock" FontWeight="Bold" FontSize="24" Margin="10"/>
+                <GridView ItemsSource="{x:Bind allPosters}" 
+                      IsItemClickEnabled="True" 
+                      ItemClick="GridView_postersItemClick"
+                      ItemTemplate="{StaticResource PostersDataTemplate}"
+                      >
+                </GridView>
+                <TextBlock Text="Backdrops: " Name="backdropTextBlock" FontWeight="Bold" FontSize="24" Margin="10"/>
+                <GridView ItemsSource="{x:Bind allBackdrops}" 
+                      IsItemClickEnabled="True" 
+                      ItemClick="GridView_backdropsItemClick"
+                      ItemTemplate="{StaticResource BackdropsDataTemplate}"
+                      >
+                </GridView>
+
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>

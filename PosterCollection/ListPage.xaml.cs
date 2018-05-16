@@ -66,6 +66,36 @@ namespace PosterCollection
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(MovieDetail));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
+
+                if (viewModel.TheMovieDetail.backdrop_path != null)
+                {
+                    viewModel.TheMovieDetail.backdrop_path = "https://image.tmdb.org/t/p/original" + viewModel.TheMovieDetail.backdrop_path;
+                }
+                else
+                {
+                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.png";
+                }
+                if (viewModel.TheMovieDetail.poster_path != null)
+                {
+                    viewModel.TheMovieDetail.poster_path = "https://image.tmdb.org/t/p/w500" + viewModel.TheMovieDetail.poster_path;
+                }
+                else
+                {
+                    viewModel.TheMovieDetail.poster_path = "Assets/defaultPoster.jpg";
+                }
+
+                foreach (var cast in viewModel.TheMovieDetail.casts.cast)
+                {
+                    if (cast.profile_path != null)
+                    {
+                        cast.profile_path = "https://image.tmdb.org/t/p/w500" + cast.profile_path;
+                    }
+                    else
+                    {
+                        cast.profile_path = "Assets/defaultPhoto.jpg";
+                    }
+                }
+
                 this.Frame.Navigate(typeof(DetailPage), 0);
             }
             catch
@@ -85,6 +115,35 @@ namespace PosterCollection
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TVDetail));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheTVDetail = (TVDetail)serializer.ReadObject(ms);
+
+                if (viewModel.TheTVDetail.backdrop_path != null)
+                {
+                    viewModel.TheTVDetail.backdrop_path = "https://image.tmdb.org/t/p/original" + viewModel.TheTVDetail.backdrop_path;
+                }
+                else
+                {
+                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.png";
+                }
+                if (viewModel.TheTVDetail.poster_path != null)
+                {
+                    viewModel.TheTVDetail.poster_path = "https://image.tmdb.org/t/p/w500" + viewModel.TheTVDetail.poster_path;
+                }
+                else
+                {
+                    viewModel.TheTVDetail.poster_path = "Assets/defaultPoster.jpg";
+                }
+
+                foreach (var season in viewModel.TheTVDetail.seasons)
+                {
+                    if (season.poster_path != null)
+                    {
+                        season.poster_path = "https://image.tmdb.org/t/p/w500" + season.poster_path;
+                    }
+                    else
+                    {
+                        season.poster_path = "Assets/defaultPoster.jpg";
+                    }
+                }
                 this.Frame.Navigate(typeof(DetailPage), 1);
             }
             catch
