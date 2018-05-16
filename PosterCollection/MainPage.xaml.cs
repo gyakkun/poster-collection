@@ -121,6 +121,7 @@ namespace PosterCollection
             }
             else if (Collection.IsSelected)
             {
+                ListFrame.Navigate(typeof(CollectorItems));
                 TitleTextBlock.Text = "Collection";
             }
         }

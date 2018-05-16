@@ -201,6 +201,10 @@ namespace PosterCollection
 
         private void collect_Click(object sender, RoutedEventArgs e)
         {
+
+
+            mystar = new Star(Mdetail.id, Mdetail.title, background, "");
+            viewModel.AddStar(mystar);
             collect.Visibility = Visibility.Collapsed;
             collected.Visibility = Visibility.Visible;
         }
