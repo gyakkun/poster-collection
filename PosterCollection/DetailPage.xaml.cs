@@ -20,6 +20,7 @@ namespace PosterCollection
         private TVDetail Tdetail;
         private int flag;
 
+        private Star mystar;
         public DetailPage()
         {
             this.InitializeComponent();

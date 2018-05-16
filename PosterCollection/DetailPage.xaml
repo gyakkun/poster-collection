@@ -33,7 +33,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
         </Grid.Background>
-        
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="Wide">
