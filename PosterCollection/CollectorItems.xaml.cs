@@ -28,6 +28,7 @@ namespace PosterCollection
     public sealed partial class CollectorItems : Page
     {
         private ViewModel viewModel;
+        private Star selectedItem;
         public CollectorItems()
         {
             this.InitializeComponent();
@@ -44,6 +45,42 @@ namespace PosterCollection
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
             viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
             this.Frame.Navigate(typeof(DetailPage), 0);
+        }
+
+        private void Delete(object sender, RoutedEventArgs e)
+        {
+            dynamic temp = e.OriginalSource;
+            Star s= temp.DataContext;
+            viewModel.DeleteStar(s.id);
+        }
+
+        private void edit(object sender, RoutedEventArgs e)
+        {
+            dynamic temp = e.OriginalSource;
+            selectedItem = temp.DataContext;
+            com.Text = selectedItem.comment;
+            comment.Visibility = Visibility.Visible;
+
+        }
+
+        private void ok(object sender, RoutedEventArgs e)
+        {
+            int id = selectedItem.id;
+
+           viewModel.EditComment(id, com.Text);
+            var db = App.conn;
+            using (var TodoItem = db.Prepare(App.SQL_UPDATE))
+            {
+                TodoItem.Bind(1, com.Text);
+                TodoItem.Bind(2, id);
+               
+                TodoItem.Step();
+
+
+            }
+
+            comment.Visibility = Visibility.Collapsed;
+            selectedItem = null;
         }
     }
 }

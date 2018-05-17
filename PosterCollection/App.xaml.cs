@@ -48,6 +48,8 @@ namespace PosterCollection
         public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),COMMENT VARCHAR(150));";
         public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,COMMENT) VALUES(?,?,?,?);";
         public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
+        public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ?";
+        public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ?";
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;

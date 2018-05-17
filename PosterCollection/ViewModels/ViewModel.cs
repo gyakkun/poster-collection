@@ -86,6 +86,37 @@ namespace PosterCollection.ViewModels
         {
             queryTVResults.Add(result);
         }
+        public void DeleteStar(int id)
+        {
+            
+            for (int i = 0; i < starlist.Count; i++)
+            {
+                if (starlist[i].id == id)
+                {
+                    starlist.RemoveAt(i);
+                    break;
+                }
+            }
+
+            using (var statement = App.conn.Prepare(App.SQL_DELETE))
+            {
+                statement.Bind(1, id);
+                
+                statement.Step();
+            }
+        }
+        public void EditComment(int id,string comment)
+        {
+            for (int i = 0; i < starlist.Count; i++)
+            {
+                if (starlist[i].id == id)
+                {
+                    starlist[i].comment=comment;
+                    break;
+                }
+            }
+
+        }
         public void AddStar(Star st)
         {
 
@@ -114,7 +145,7 @@ namespace PosterCollection.ViewModels
         {
             queryMovieResults.Clear();
             queryTVResults.Clear();
-            starlist.Clear();
+          
         }
     }
 }
