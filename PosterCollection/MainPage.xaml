@@ -65,7 +65,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal" Margin="10">
+                        <StackPanel Orientation="Horizontal" Name="FilterSelectPanel" Margin="10">
 
                            
 

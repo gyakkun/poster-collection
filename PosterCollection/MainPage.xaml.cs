@@ -121,6 +121,7 @@ namespace PosterCollection
             }
             else if (Collection.IsSelected)
             {
+                ListFrame.Navigate(typeof(CollectorItems));
                 TitleTextBlock.Text = "Collection";
             }
         }
@@ -348,8 +349,9 @@ namespace PosterCollection
 
         private void ListFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
-            BackAppBarButton.Visibility = ListFrame.CurrentSourcePageType.Equals(typeof(DetailPage)) ? Visibility.Visible : Visibility.Collapsed;
-            pageChangePanel.Visibility = ListFrame.CurrentSourcePageType.Equals(typeof(DetailPage)) ? Visibility.Collapsed : Visibility.Visible;
+            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Visible : Visibility.Collapsed;
+            pageChangePanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
+            FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void tvGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,4 +1,4 @@
-﻿<Page
+﻿ <Page
     x:Class="PosterCollection.DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -33,7 +33,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
         </Grid.Background>
-        
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="Wide">
@@ -235,12 +235,12 @@
                     </GridView>
                 </Grid>
 
-
                 <TextBlock Text="Data provided by TMDB. © 2018 TMDB" 
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    Grid.Row="1"
                    Grid.ColumnSpan="2"/>
+                
             </Grid>
         </ScrollViewer>
 
@@ -258,6 +258,7 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE00B;"/>
                 </AppBarButton.Icon>
             </AppBarButton>
+            <AppBarButton x:Name="PostersBrowserAppBarButton" Click="PostersBrowserAppBarButton_Click" Label="Posters Browser" Icon="Pictures"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
