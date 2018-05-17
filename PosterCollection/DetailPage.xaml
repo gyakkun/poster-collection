@@ -1,12 +1,34 @@
-﻿<Page
+﻿ <Page
     x:Class="PosterCollection.DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PosterCollection"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:PosterCollection.Models"
     mc:Ignorable="d">
-
+    
+    <Page.Resources>
+        <DataTemplate x:DataType="data:Cast" x:Key="MovieCharacterDataTemplate">
+            <StackPanel HorizontalAlignment="Center">
+                <Ellipse Width="100" Height="120" Margin="5">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{x:Bind profile_path}" />
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock Margin="0,0,0,5" Text="{x:Bind name}" HorizontalAlignment="Center"/>
+                <TextBlock Margin="0,0,0,5" Text="{x:Bind character}" Foreground="Blue" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:DataType="data:Season" x:Key="SeasonsDataTemplate">
+            <StackPanel HorizontalAlignment="Center">
+                <Image Source="{x:Bind poster_path}" Width="150"/>
+                <TextBlock Margin="0,0,0,5" Text="{x:Bind name}" HorizontalAlignment="Center"/>
+                <TextBlock Margin="0,0,0,5" Text="{x:Bind air_date}" Foreground="Blue" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind background}" Opacity="0.4"/>
@@ -21,6 +43,9 @@
                     <VisualState.Setters>
                         <Setter Target="movieDetailGrid.(Grid.Row)" Value="0" />
                         <Setter Target="movieDetailGrid.(Grid.Column)" Value="1" />
+
+                        <Setter Target="tvDetailGrid.(Grid.Row)" Value="0" />
+                        <Setter Target="tvDetailGrid.(Grid.Column)" Value="1" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -31,6 +56,10 @@
                         <Setter Target="movieDetailGrid.(Grid.Row)" Value="1" />
                         <Setter Target="movieDetailGrid.(Grid.Column)" Value="0" />
                         <Setter Target="movieDetailGrid.(Grid.ColumnSpan)" Value="2"/>
+
+                        <Setter Target="tvDetailGrid.(Grid.Row)" Value="1" />
+                        <Setter Target="tvDetailGrid.(Grid.Column)" Value="0" />
+                        <Setter Target="tvDetailGrid.(Grid.ColumnSpan)" Value="2"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -41,20 +70,17 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- Detail Grid -->
-                <Image Name="PosterImage" Width="400" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top" Source="{x:Bind Mdetail.poster_path}"/>
+                
+                <!-- MovieDetail Grid -->
+                <Image Name="moviePosterImage" Width="400" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top" Source="{x:Bind Mdetail.poster_path}"/>
                 <Grid Name="movieDetailGrid" Grid.Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -83,7 +109,7 @@
                     <TextBlock Text="Original Language: " FontWeight="Bold" Grid.Row="2" Margin="10"/>
                     <TextBlock Text="{x:Bind Mdetail.original_language}" Margin="10" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"/>
 
-                    <TextBlock Text="Spoken Languages" FontWeight="Bold" Grid.Row="3" Margin="10"/>
+                    <TextBlock Text="Spoken Languages: " FontWeight="Bold" Grid.Row="3" Margin="10"/>
                     <TextBlock Name="spokenLanguageTextBlock" Margin="10" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
 
                     <TextBlock Text="Genres: " FontWeight="Bold" Grid.Row="4" Margin="10"/>
@@ -111,21 +137,128 @@
                     <TextBlock Name="scoreTextBlock" Margin="10" Grid.Row="11" Grid.Column="1" TextWrapping="Wrap"/>
 
                     <TextBlock Text="Homepage: " FontWeight="Bold" Grid.Row="12" Margin="10"/>
-                    <HyperlinkButton Name="homePageLink" Margin="10" Grid.Row="12" Grid.Column="1" Content="{x:Bind Mdetail.homepage}"/>
+                    <HyperlinkButton Margin="10" Grid.Row="12" Grid.Column="1" Content="{x:Bind Mdetail.homepage}"/>
 
                     <TextBlock Text="Overview: " FontWeight="Bold" Grid.Row="13" Margin="10"/>
                     <TextBlock Text="{x:Bind Mdetail.overview}" Margin="10" Grid.Row="13" Grid.Column="1" TextWrapping="Wrap"/>
+                    <!-- Star GridView -->
+                    <TextBlock Text="Actors(Voice actors): " FontWeight="Bold" Grid.Row="14" Margin="10"/>
+                    <GridView Name="starGridView" Grid.Column="1"  Grid.Row="14" ItemsSource="{x:Bind Mdetail.casts.cast}" 
+                      ItemTemplate="{StaticResource MovieCharacterDataTemplate}"
+                      IsItemClickEnabled="True"
+                      ItemClick="starGridView_ItemClick"
+                      >
+                    </GridView>
+                </Grid>
+
+                <Image Name="tvPosterImage" Width="400" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top" Source="{x:Bind Tdetail.poster_path}"/>
+                <Grid Name="tvDetailGrid" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Original Name: " FontWeight="Bold" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.original_name}" Margin="10" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Name: " FontWeight="Bold" Grid.Row="1" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.name}" Margin="10" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Original Language: " FontWeight="Bold" Grid.Row="2" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.original_language}" Margin="10" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Languages: " FontWeight="Bold" Grid.Row="3" Margin="10"/>
+                    <TextBlock Name="LanguageText" Margin="10" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Genres: " FontWeight="Bold" Grid.Row="4" Margin="10"/>
+                    <TextBlock Name="genresText" Margin="10" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Original Countries: " FontWeight="Bold" Grid.Row="5" Margin="10"/>
+                    <TextBlock Name="originalCountriesText" Margin="10" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Production Companies: " FontWeight="Bold" Grid.Row="6" Margin="10"/>
+                    <TextBlock Name="productionCompaniesText"  Margin="10" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="First Air Date: " FontWeight="Bold" Grid.Row="7" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.first_air_date}" Margin="10" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Last Air Date: " FontWeight="Bold" Grid.Row="8" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.last_air_date}" Margin="10" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Status: " FontWeight="Bold" Grid.Row="9" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.status}" Margin="10" Grid.Row="9" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Number Of Episodes: " FontWeight="Bold" Grid.Row="10" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.number_of_episodes}" Margin="10" Grid.Row="10" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Number of Seasons: " FontWeight="Bold" Grid.Row="11" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.number_of_seasons}" Margin="10" Grid.Row="11" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Score: " FontWeight="Bold" Grid.Row="12" Margin="10"/>
+                    <TextBlock Name="scoreText" Margin="10" Grid.Row="12" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Homepage: " FontWeight="Bold" Grid.Row="13" Margin="10"/>
+                    <HyperlinkButton Margin="10" Grid.Row="13" Grid.Column="1" Content="{x:Bind Tdetail.homepage}"/>
+
+                    <TextBlock Text="Creators: " FontWeight="Bold" Grid.Row="14" Margin="10"/>
+                    <TextBlock Name="createText" Margin="10" Grid.Row="14" Grid.Column="1" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Overview: " FontWeight="Bold" Grid.Row="15" Margin="10"/>
+                    <TextBlock Text="{x:Bind Tdetail.overview}" Margin="10" Grid.Row="15" Grid.Column="1" TextWrapping="Wrap"/>
+                    <!-- Seasons GridView -->
+                    
+                    <TextBlock Text="Seasons: " FontWeight="Bold" Grid.Row="16" Margin="10"/>
+                    <GridView Name="seasonsGridView" Grid.Column="1"  Grid.Row="16" ItemsSource="{x:Bind Tdetail.seasons}" 
+                      ItemTemplate="{StaticResource SeasonsDataTemplate}"
+                      IsItemClickEnabled="True"
+                      ItemClick="seasonsGridView_ItemClick"
+                      >
+                    </GridView>
                 </Grid>
 
                 <TextBlock Text="Data provided by TMDB. © 2018 TMDB" 
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   Grid.Row="6"
+                   Grid.Row="1"
                    Grid.ColumnSpan="2"/>
-
-                <Button Content="收藏" Grid.Row="5" Margin="120,10,0,-53" Width="154" Height="75" Click="Button_Click"/>
+                
             </Grid>
         </ScrollViewer>
 
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="collect" Label="Collect" Click="collect_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE006;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="collected" Label="Collect" Visibility="Collapsed" Click="collected_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE00B;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="PostersBrowserAppBarButton" Click="PostersBrowserAppBarButton_Click" Label="Posters Browser" Icon="Pictures"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
