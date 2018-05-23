@@ -5,6 +5,8 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -30,6 +32,7 @@ namespace PosterCollection
             this.InitializeComponent();
             viewModel = ViewModel.Instance;
             InitializeList();
+            UpdateTile();
         }
 
         private async void InitializeList()
@@ -469,6 +472,41 @@ namespace PosterCollection
                     break;
             }
             InitializeList();
+        }
+        private void UpdateTile()
+        {
+            
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+
+            
+            updater.EnableNotificationQueue(true);
+            updater.Clear();
+            int itemCount = 0;
+
+            //然后这里是重点：记得分3步走：
+            foreach (var item in viewModel.Starlist)
+            {
+                //1：创建xml对象，这里看你想显示几种动态磁贴，如果想显示正方形和长方形的，那就分别设置一个动态磁贴类型即可。
+                //下面这两个分别是矩形的动态磁贴，和方形的动态磁贴，具体样式，自己可以去微软官网查一查。我这里用到的是换行的文字形式。
+                XmlDocument xml = new XmlDocument();
+                xml.LoadXml(File.ReadAllText("tiles.xml"));
+
+
+                XmlNodeList text = xml.GetElementsByTagName("text");
+                ((XmlElement)text[2]).InnerText = item.title;
+                ((XmlElement)text[3]).InnerText = item.comment;
+                ((XmlElement)text[4]).InnerText = item.title;
+                ((XmlElement)text[5]).InnerText = item.comment;
+                ((XmlElement)text[6]).InnerText = item.title;
+                ((XmlElement)text[7]).InnerText = item.comment;
+
+                //3.然后用Update方法来更新这个磁贴
+                updater.Update(new TileNotification(xml));
+
+                //4.最后这里需要注意的是微软规定动态磁贴的队列数目小于5个，所以这里做出判断。
+                if (itemCount++ > 5) break;
+            }
+
         }
     }
 }

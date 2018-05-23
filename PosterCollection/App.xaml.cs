@@ -63,6 +63,8 @@ namespace PosterCollection
             }
         }
 
+
+
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack && !((Frame)sender).CurrentSourcePageType.Equals(typeof(MainPage)) ?
