@@ -156,6 +156,7 @@ namespace PosterCollection
                 MyProgressRing.Visibility = Visibility.Visible;
 
                 try {
+                    this.Frame.Navigate(typeof(ListPage), 2);
                     viewModel.clear();
                     for (int i = 1; i <= 5; i++)
                     {
@@ -206,7 +207,6 @@ namespace PosterCollection
                             
                         }
                     }
-                    this.Frame.Navigate(typeof(ListPage), 2);
                 }
                 catch
                 {

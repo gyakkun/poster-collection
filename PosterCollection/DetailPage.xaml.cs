@@ -246,7 +246,7 @@ namespace PosterCollection {
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
 
-        private void collect_Click(object sender, RoutedEventArgs e) {
+        private async void collect_Click(object sender, RoutedEventArgs e) {
 
             if(flag == 0)
             {
