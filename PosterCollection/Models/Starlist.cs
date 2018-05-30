@@ -12,12 +12,14 @@ namespace PosterCollection.Models
         public string title;
         public string imagepath;
         public string comment;
-        public Star(int id,string title,string imagepath,string comment)
+        public int type;
+        public Star(int id,string title,string imagepath,string comment, int type)
         {
             this.id = id;
             this.title = title;
             this.imagepath = imagepath;
             this.comment = comment;
+            this.type = type;
         }
 
     }

@@ -27,7 +27,7 @@ namespace PosterCollection.ViewModels
                 while (SQLiteResult.ROW == statement.Step())
                 {
                     
-                    Starlist.Add(new Star(Convert.ToInt32(statement[0]), (string)statement[1], (string)statement[2], (string)statement[3]));
+                    Starlist.Add(new Star(Convert.ToInt32(statement[0]), (string)statement[1], (string)statement[2], (string)statement[3], Convert.ToInt32(statement[4])));
                     
                 }
             }
@@ -132,7 +132,7 @@ namespace PosterCollection.ViewModels
                     TodoItem.Bind(2, st.title);
                     TodoItem.Bind(3, st.imagepath);
                     TodoItem.Bind(4, st.comment);
-                    
+                    TodoItem.Bind(5, st.type);
                     TodoItem.Step();
                 }
             }

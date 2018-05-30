@@ -43,10 +43,10 @@ namespace PosterCollection
         }
 
         static public SQLiteConnection conn { get; set; }
-        public static String DB_NAME = "Collectors.db";
-        public static String TABLE_NAME = "Collectors";
-        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),COMMENT VARCHAR(150));";
-        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,COMMENT) VALUES(?,?,?,?);";
+        public static String DB_NAME = "Collector.db";
+        public static String TABLE_NAME = "Collector";
+        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),COMMENT VARCHAR(150),TYPE INTEGER);";
+        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,COMMENT,TYPE) VALUES(?,?,?,?,?);";
         public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
         public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ?";
         public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ?";

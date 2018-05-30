@@ -4,10 +4,12 @@ using System;
 using System.IO;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -33,18 +35,23 @@ namespace PosterCollection {
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
             viewModel = ViewModel.Instance;
-            int id = viewModel.TheMovieDetail.id;
-
-            for (int i = 0; i < viewModel.Starlist.Count; i++) {
-                if (viewModel.Starlist[i].id == id) {
-                    collect.Visibility = Visibility.Collapsed;
-                    collected.Visibility = Visibility.Visible;
-                    break;
-                }
-            }
+            
             if (e.Parameter is int) {
                 flag = (int)e.Parameter;
+                
                 if (flag == 0) {
+
+                    int id = viewModel.TheMovieDetail.id;
+
+                    for (int i = 0; i < viewModel.Starlist.Count; i++)
+                    {
+                        if (viewModel.Starlist[i].id == id)
+                        {
+                            collect.Visibility = Visibility.Collapsed;
+                            collected.Visibility = Visibility.Visible;
+                            break;
+                        }
+                    }
                     tvDetailGrid.Visibility = Visibility.Collapsed;
                     tvPosterImage.Visibility = Visibility.Collapsed;
 
@@ -103,6 +110,19 @@ namespace PosterCollection {
 
                 }
                 else if (flag == 1) {
+
+                    int id = viewModel.TheTVDetail.id;
+
+                    for (int i = 0; i < viewModel.Starlist.Count; i++)
+                    {
+                        if (viewModel.Starlist[i].id == id)
+                        {
+                            collect.Visibility = Visibility.Collapsed;
+                            collected.Visibility = Visibility.Visible;
+                            break;
+                        }
+                    }
+
                     movieDetailGrid.Visibility = Visibility.Collapsed;
                     moviePosterImage.Visibility = Visibility.Collapsed;
 
@@ -158,16 +178,50 @@ namespace PosterCollection {
             DataTransferManager.GetForCurrentView().DataRequested += OnShareDataRequested;
         }
 
-        void OnShareDataRequested(DataTransferManager sender, DataRequestedEventArgs args) {
+        private void OnShareDataRequested(DataTransferManager sender, DataRequestedEventArgs args) {
+
             DataRequest request = args.Request;
-            request.Data.Properties.Title = Mdetail.title;
-            request.Data.Properties.Description = Mdetail.poster_path;
-            DataRequestDeferral deferal = request.GetDeferral();
 
-            request.Data.SetText(Mdetail.poster_path);
+            var deferral = args.Request.GetDeferral();
 
-            //request.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(Mdetail.poster_path)));
-            deferal.Complete();
+            try
+            {
+                if(flag == 0)
+                {
+                    request.Data.Properties.Title = Mdetail.title;
+                    request.Data.Properties.Description = Mdetail.overview;
+                    // 设置文本
+                    request.Data.SetText(Mdetail.title + '\n' + Mdetail.overview + '\n');
+
+                    //添加图片
+                    
+                    RandomAccessStreamReference imageRASR = RandomAccessStreamReference.CreateFromUri(((BitmapImage)moviePosterImage.Source).UriSource);
+                    // 建议用Thumbnail分享文件
+                    request.Data.Properties.Thumbnail = imageRASR;
+                    request.Data.SetBitmap(imageRASR);
+
+                }
+                else if(flag == 1)
+                {
+                    request.Data.Properties.Title = Tdetail.name;
+                    request.Data.Properties.Description = Tdetail.overview;
+                    // 设置文本
+                    request.Data.SetText(Tdetail.name + '\n' + Tdetail.overview + '\n');
+
+                    //添加图片
+
+                    RandomAccessStreamReference imageRASR = RandomAccessStreamReference.CreateFromUri(((BitmapImage)tvPosterImage.Source).UriSource);
+                    // 建议用Thumbnail分享文件
+                    request.Data.Properties.Thumbnail = imageRASR;
+                    request.Data.SetBitmap(imageRASR);
+                }
+                
+
+            }
+            finally
+            {
+                deferral.Complete();
+            }
         }
 
 
@@ -193,8 +247,16 @@ namespace PosterCollection {
 
         private void collect_Click(object sender, RoutedEventArgs e) {
 
+            if(flag == 0)
+            {
+                mystar = new Star(Mdetail.id, Mdetail.title, background, "",0);
 
-            mystar = new Star(Mdetail.id, Mdetail.title, background, "");
+            }
+            else
+            {
+                mystar = new Star(Tdetail.id, Tdetail.name, background, "", 1);
+                
+            }
             viewModel.AddStar(mystar);
             UpdateTile();
             collect.Visibility = Visibility.Collapsed;
