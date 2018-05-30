@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -216,20 +217,27 @@ namespace PosterCollection
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
 
-        private void collect_Click(object sender, RoutedEventArgs e)
+        private async void collect_Click(object sender, RoutedEventArgs e)
         {
           
 
             mystar = new Star(Mdetail.id, Mdetail.title, background, "");
             viewModel.AddStar(mystar);
             UpdateTile();
+            
+            var dialog = new MessageDialog("收藏成功", "消息提示");
+            dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+            var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Collapsed;
             collected.Visibility = Visibility.Visible;
         }
 
-        private void collected_Click(object sender, RoutedEventArgs e)
+        private async void collected_Click(object sender, RoutedEventArgs e)
         {
             viewModel.DeleteStar(Mdetail.id);
+            var dialog = new MessageDialog("已取消收藏", "消息提示");
+            dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+            var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Visible;
             collected.Visibility = Visibility.Collapsed;
         }

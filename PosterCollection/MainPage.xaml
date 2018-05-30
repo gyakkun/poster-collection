@@ -153,6 +153,9 @@
                         </StackPanel>
                         <Frame Name="ListFrame" Grid.Row="1" Navigated="ListFrame_Navigated"/>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Name="pageChangePanel" HorizontalAlignment="Right">
+                        <MediaElement Source = "Assets/music.mp3" AutoPlay = "True" Name="music" IsLooping="True"/>
+                        <AppBarButton Name="start" Icon="Play" FontSize="20" Click="start_Click" HorizontalAlignment="Left" Label="play"/>
+                        <AppBarButton Name="pause" Icon="Pause" FontSize="20" Click="pause_Click" Label="pause"/>
                         <AppBarButton Icon="Previous" Name="PreviousAppBarButton" Click="PreviousAppBarButton_Click" Label="Previous"/>
                         <AppBarButton Icon="Next" Name="NextAppBarButton" Click="NextAppBarButton_Click" Label="Next"/>
                     </StackPanel>

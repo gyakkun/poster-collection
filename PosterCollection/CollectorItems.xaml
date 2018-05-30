@@ -24,6 +24,7 @@
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton >
+                <TextBox  Grid.Column="1"  Text="{x:Bind comment}" Name="com"  Height="40" HorizontalAlignment="Right" />
             </StackPanel>
         </DataTemplate>
 

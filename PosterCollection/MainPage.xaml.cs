@@ -508,5 +508,15 @@ namespace PosterCollection
             }
 
         }
+
+        private void pause_Click(object sender, RoutedEventArgs e)
+        {
+            music.Pause();
+        }
+
+        private void start_Click(object sender, RoutedEventArgs e)
+        {
+            music.Play();
+        }
     }
 }
