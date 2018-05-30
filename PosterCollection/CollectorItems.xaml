@@ -63,25 +63,6 @@
                 Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            Text="Collector Items"
-            FontWeight="Bold"
-            FontSize="32"
-            FontFamily="Microsoft YaHei"
-            Margin="10"
-            HorizontalAlignment="Center" />
-        <ContentDialog 
-            x:Name="CommentDialog"
-            Title="Comment"
-            PrimaryButtonText="Confirm"
-            SecondaryButtonText="Cancel"
-            PrimaryButtonClick="ok"
-
-                             >
-            <TextBox Name="Comment">
-
-            </TextBox>
-        </ContentDialog>
         <ScrollViewer
             Grid.Row="1">
             <StackPanel>
@@ -95,10 +76,6 @@
                         <RowDefinition
                             Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock
-                        Grid.Row="0"
-                        FontFamily="Microsoft YaHei"
-                        FontSize="24">Results:</TextBlock>
                     <GridView
                         Grid.Row="1"
                         ItemsSource="{x:Bind viewModel.Starlist}"
@@ -131,9 +108,21 @@
 
 
                 </Grid>
+                <ContentDialog 
+                x:Name="CommentDialog"
+                Title="Comment"
+                PrimaryButtonText="Confirm"
+                SecondaryButtonText="Cancel"
+                PrimaryButtonClick="ok"
+                >
+                <TextBox Name="Comment">
 
+                </TextBox>
+                </ContentDialog>
             </StackPanel>
-
+            
         </ScrollViewer>
+
+        
     </Grid>
 </Page>

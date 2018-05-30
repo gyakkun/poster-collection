@@ -98,9 +98,6 @@
     <Compile Include="CollectorItems.xaml.cs">
       <DependentUpon>CollectorItems.xaml</DependentUpon>
     </Compile>
-    <Compile Include="comment.xaml.cs">
-      <DependentUpon>comment.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
@@ -153,10 +150,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="CollectorItems.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="comment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

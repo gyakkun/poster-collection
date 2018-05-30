@@ -36,6 +36,7 @@ namespace PosterCollection
             //MyProgressRing.Visibility = Visibility.Visible;
             viewModel = ViewModel.Instance;
             InitializeList();
+            ListFrame.Navigate(typeof(ListPage),flag);
             UpdateTile();
         }
 
@@ -51,8 +52,6 @@ namespace PosterCollection
 
         private async void InitializeList()
         {
-
-
             try
             {
                 if (VideoTypeComboBox.SelectedIndex == 0)
@@ -83,7 +82,6 @@ namespace PosterCollection
                             }
                             viewModel.AddMovieResult(result);
                         }
-                        ListFrame.Navigate(typeof(ListPage), 0);
                     }
 
                 }
@@ -116,7 +114,6 @@ namespace PosterCollection
                             }
                             viewModel.AddTVResult(result);
                         }
-                        ListFrame.Navigate(typeof(ListPage), 1);
                     }
                 }
             }
