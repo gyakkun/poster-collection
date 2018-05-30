@@ -22,7 +22,8 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid Background="SkyBlue" Name="listGrid">
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="listGrid">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
