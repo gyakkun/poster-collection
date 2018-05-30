@@ -26,21 +26,38 @@ namespace PosterCollection
         private string Tgenre = "";
         private string releaseYear = "";
         private string sortBy = "&sort_by=popularity.desc";
+        private int flag;
 
         public MainPage()
         {
             this.InitializeComponent();
+            //Show the waiting ring.
+            //MyProgressRing.IsActive = true;
+            //MyProgressRing.Visibility = Visibility.Visible;
             viewModel = ViewModel.Instance;
             InitializeList();
             UpdateTile();
         }
 
+        //private  void showProgressRing() {
+        //    MyProgressRing.IsActive = true;
+        //    MyProgressRing.Visibility = Visibility.Visible;
+        //}
+
+        //private  void killProgressRing() {
+        //    MyProgressRing.IsActive = false;
+        //    MyProgressRing.Visibility = Visibility.Collapsed;
+        //}
+
         private async void InitializeList()
         {
+
+
             try
             {
                 if (VideoTypeComboBox.SelectedIndex == 0)
                 {
+                    flag = 0;
                     String url = String.Format("https://api.themoviedb.org/3/discover/movie?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}{4}", language,page,Mgenre,releaseYear,sortBy);
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
@@ -72,6 +89,7 @@ namespace PosterCollection
                 }
                 else
                 {
+                    flag = 1;
                     String url = String.Format("https://api.themoviedb.org/3/discover/tv?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}", language,page,Tgenre,sortBy);
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
@@ -106,7 +124,9 @@ namespace PosterCollection
             {
                 await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
             }
+
         }
+
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
@@ -117,10 +137,8 @@ namespace PosterCollection
             if (Home.IsSelected)
             {
                 TitleTextBlock.Text = "Home";
-                if (ListFrame.CanGoBack)
-                {
-                    ListFrame.GoBack();
-                }
+                ListFrame.Navigate(typeof(ListPage), flag);
+                
             }
             else if (Collection.IsSelected)
             {
@@ -133,9 +151,11 @@ namespace PosterCollection
         {
             if (Search.Text != "")
             {
-                
-                try
-                {
+                //Show the waiting ring.
+                MyProgressRing.IsActive = true;
+                MyProgressRing.Visibility = Visibility.Visible;
+
+                try {
                     viewModel.clear();
                     for (int i = 1; i <= 5; i++)
                     {
@@ -192,11 +212,17 @@ namespace PosterCollection
                 {
                     await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
                 }
+
+                //Kill the waiting ring.
+                MyProgressRing.IsActive = false;
+                MyProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
                 await new Windows.UI.Popups.MessageDialog("Please enter key words first! ").ShowAsync();
             }
+
+
         }
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -352,9 +378,9 @@ namespace PosterCollection
 
         private void ListFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
-            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Visible : Visibility.Collapsed;
+            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))&&!ListFrame.CurrentSourcePageType.Equals(typeof(CollectorItems)) ? Visibility.Visible : Visibility.Collapsed;
             pageChangePanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
-            FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
+            FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void tvGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -2,214 +2,243 @@
 using PosterCollection.ViewModels;
 using System;
 using System.IO;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace PosterCollection
-{
+namespace PosterCollection {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class DetailPage : Page
-    {
+    public sealed partial class DetailPage : Page {
         private ViewModel viewModel;
         private string background;
         private MovieDetail Mdetail;
         private TVDetail Tdetail;
         private int flag;
 
+
         private Star mystar;
-        public DetailPage()
-        {
+        public DetailPage() {
             this.InitializeComponent();
             viewModel = ViewModel.Instance;
 
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             viewModel = ViewModel.Instance;
-            int id = viewModel.TheMovieDetail.id;
-           
-            for (int i = 0; i < viewModel.Starlist.Count; i++)
-            {
-                if (viewModel.Starlist[i].id == id)
-                {
-                    collect.Visibility = Visibility.Collapsed;
-                    collected.Visibility = Visibility.Visible;
-                    break;
-                }
-            }
-            if (e.Parameter is int)
-            {
+            
+            if (e.Parameter is int) {
                 flag = (int)e.Parameter;
-                if (flag == 0)
-                {
+                
+                if (flag == 0) {
+
+                    int id = viewModel.TheMovieDetail.id;
+
+                    for (int i = 0; i < viewModel.Starlist.Count; i++)
+                    {
+                        if (viewModel.Starlist[i].id == id)
+                        {
+                            collect.Visibility = Visibility.Collapsed;
+                            collected.Visibility = Visibility.Visible;
+                            break;
+                        }
+                    }
                     tvDetailGrid.Visibility = Visibility.Collapsed;
                     tvPosterImage.Visibility = Visibility.Collapsed;
 
                     Mdetail = viewModel.TheMovieDetail;
-                   
+
                     background = Mdetail.backdrop_path;
 
                     productionCompaniesTextBlock.Text = "";
-                    foreach (var PCompany in Mdetail.production_companies)
-                    {
+                    foreach (var PCompany in Mdetail.production_companies) {
                         productionCompaniesTextBlock.Text += PCompany.name + "\n";
                     }
-                    if (productionCompaniesTextBlock.Text == "")
-                    {
+                    if (productionCompaniesTextBlock.Text == "") {
                         productionCompaniesTextBlock.Text = "Unknown";
                     }
                     productionCountriesTextBlock.Text = "";
-                    foreach (var PCountries in Mdetail.production_countries)
-                    {
+                    foreach (var PCountries in Mdetail.production_countries) {
                         productionCountriesTextBlock.Text += PCountries.name + "\n";
                     }
-                    if (productionCountriesTextBlock.Text == "")
-                    {
+                    if (productionCountriesTextBlock.Text == "") {
                         productionCountriesTextBlock.Text = "Unknown";
                     }
                     genresTextBlock.Text = "";
-                    foreach (var genre in Mdetail.genres)
-                    {
+                    foreach (var genre in Mdetail.genres) {
                         genresTextBlock.Text += " | " + genre.name;
                     }
-                    if (genresTextBlock.Text != "")
-                    {
+                    if (genresTextBlock.Text != "") {
                         genresTextBlock.Text = genresTextBlock.Text.Substring(3);
                     }
-                    else
-                    {
+                    else {
                         genresTextBlock.Text = "Unkonwn";
                     }
                     spokenLanguageTextBlock.Text = "";
-                    foreach (var language in Mdetail.spoken_languages)
-                    {
+                    foreach (var language in Mdetail.spoken_languages) {
                         spokenLanguageTextBlock.Text += " | " + language.name;
                     }
-                    if (spokenLanguageTextBlock.Text != "")
-                    {
+                    if (spokenLanguageTextBlock.Text != "") {
                         spokenLanguageTextBlock.Text = spokenLanguageTextBlock.Text.Substring(3);
                     }
-                    else
-                    {
+                    else {
                         spokenLanguageTextBlock.Text = Mdetail.original_language;
                     }
                     scoreTextBlock.Text = Mdetail.vote_average + " points / " + Mdetail.vote_count + " participants";
-                    if (Mdetail.revenue != 0)
-                    {
+                    if (Mdetail.revenue != 0) {
                         revenueTextBlock.Text = Mdetail.revenue + " dollars";
                     }
-                    else
-                    {
+                    else {
                         revenueTextBlock.Text = "Unknown";
                     }
-                    if (Mdetail.budget != 0)
-                    {
+                    if (Mdetail.budget != 0) {
                         budgetTextBlock.Text = Mdetail.budget + " dollars";
                     }
-                    else
-                    {
+                    else {
                         budgetTextBlock.Text = "Unknown";
                     }
                     runtimeTextBlock.Text = Mdetail.runtime + " minutes";
 
                 }
-                else if(flag == 1)
-                {
+                else if (flag == 1) {
+
+                    int id = viewModel.TheTVDetail.id;
+
+                    for (int i = 0; i < viewModel.Starlist.Count; i++)
+                    {
+                        if (viewModel.Starlist[i].id == id)
+                        {
+                            collect.Visibility = Visibility.Collapsed;
+                            collected.Visibility = Visibility.Visible;
+                            break;
+                        }
+                    }
+
                     movieDetailGrid.Visibility = Visibility.Collapsed;
                     moviePosterImage.Visibility = Visibility.Collapsed;
 
                     Tdetail = viewModel.TheTVDetail;
 
                     background = Tdetail.backdrop_path;
-                    
+
                     originalCountriesText.Text = "";
-                    foreach (var country in Tdetail.origin_country)
-                    {
+                    foreach (var country in Tdetail.origin_country) {
                         originalCountriesText.Text += country + "\n";
                     }
-                    if (originalCountriesText.Text == "")
-                    {
+                    if (originalCountriesText.Text == "") {
                         originalCountriesText.Text = "Unknown";
                     }
                     productionCompaniesText.Text = "";
-                    foreach (var PCompany in Tdetail.production_companies)
-                    {
+                    foreach (var PCompany in Tdetail.production_companies) {
                         productionCompaniesText.Text += PCompany.name + "\n";
                     }
-                    if (productionCompaniesText.Text == "")
-                    {
+                    if (productionCompaniesText.Text == "") {
                         productionCompaniesText.Text = "Unknown";
                     }
                     genresTextBlock.Text = "";
-                    foreach (var genre in Tdetail.genres)
-                    {
+                    foreach (var genre in Tdetail.genres) {
                         genresText.Text += " | " + genre.name;
                     }
-                    if (genresText.Text != "")
-                    {
+                    if (genresText.Text != "") {
                         genresText.Text = genresText.Text.Substring(3);
                     }
-                    else
-                    {
+                    else {
                         genresText.Text = "Unkonwn";
                     }
                     LanguageText.Text = "";
-                    foreach (var language in Tdetail.languages)
-                    {
+                    foreach (var language in Tdetail.languages) {
                         LanguageText.Text += " | " + language;
                     }
-                    if (LanguageText.Text != "")
-                    {
+                    if (LanguageText.Text != "") {
                         LanguageText.Text = LanguageText.Text.Substring(3);
                     }
-                    else
-                    {
+                    else {
                         LanguageText.Text = Tdetail.original_language;
                     }
                     scoreText.Text = Tdetail.vote_average + " points / " + Tdetail.vote_count + " participants";
 
                     createText.Text = "";
-                    foreach (var creator in Tdetail.created_by)
-                    {
+                    foreach (var creator in Tdetail.created_by) {
                         createText.Text += creator.name + "\n";
                     }
-                    if (createText.Text == "")
-                    {
+                    if (createText.Text == "") {
                         createText.Text = "Unknown";
                     }
                 }
             }
-
+            DataTransferManager.GetForCurrentView().DataRequested += OnShareDataRequested;
         }
 
-       
+        private void OnShareDataRequested(DataTransferManager sender, DataRequestedEventArgs args) {
+
+            DataRequest request = args.Request;
+
+            var deferral = args.Request.GetDeferral();
+
+            try
+            {
+                if(flag == 0)
+                {
+                    request.Data.Properties.Title = Mdetail.title;
+                    request.Data.Properties.Description = Mdetail.overview;
+                    // 设置文本
+                    request.Data.SetText(Mdetail.title + '\n' + Mdetail.overview + '\n');
+
+                    //添加图片
+                    
+                    RandomAccessStreamReference imageRASR = RandomAccessStreamReference.CreateFromUri(((BitmapImage)moviePosterImage.Source).UriSource);
+                    // 建议用Thumbnail分享文件
+                    request.Data.Properties.Thumbnail = imageRASR;
+                    request.Data.SetBitmap(imageRASR);
+
+                }
+                else if(flag == 1)
+                {
+                    request.Data.Properties.Title = Tdetail.name;
+                    request.Data.Properties.Description = Tdetail.overview;
+                    // 设置文本
+                    request.Data.SetText(Tdetail.name + '\n' + Tdetail.overview + '\n');
+
+                    //添加图片
+
+                    RandomAccessStreamReference imageRASR = RandomAccessStreamReference.CreateFromUri(((BitmapImage)tvPosterImage.Source).UriSource);
+                    // 建议用Thumbnail分享文件
+                    request.Data.Properties.Thumbnail = imageRASR;
+                    request.Data.SetBitmap(imageRASR);
+                }
+                
+
+            }
+            finally
+            {
+                deferral.Complete();
+            }
+        }
 
 
-        private async void seasonsGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
+        private async void seasonsGridView_ItemClick(object sender, ItemClickEventArgs e) {
             var item = (Season)e.ClickedItem;
             string message = "Season Name:\t" + item.name + "\n\n" +
                              "Episode count:\t" + item.episode_count + "\n\n" +
                              "Air Date:\t" + item.air_date + "\n\n";
 
-            if (item.overview != null && item.overview != "")
-            {
+            if (item.overview != null && item.overview != "") {
                 message += "Overview:\n\n" + item.overview + "\n";
             }
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
 
-        private async void starGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
+        private async void starGridView_ItemClick(object sender, ItemClickEventArgs e) {
             var item = (Cast)e.ClickedItem;
             string message = "Name:\t\t" + item.name + "\n\n";
             message += "Character:\t" + item.character + "\n";
@@ -217,11 +246,18 @@ namespace PosterCollection
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
 
-        private async void collect_Click(object sender, RoutedEventArgs e)
-        {
-          
+        private void collect_Click(object sender, RoutedEventArgs e) {
 
-            mystar = new Star(Mdetail.id, Mdetail.title, background, "");
+            if(flag == 0)
+            {
+                mystar = new Star(Mdetail.id, Mdetail.title, background, "",0);
+
+            }
+            else
+            {
+                mystar = new Star(Tdetail.id, Tdetail.name, background, "", 1);
+                
+            }
             viewModel.AddStar(mystar);
             UpdateTile();
             
@@ -242,21 +278,17 @@ namespace PosterCollection
             collected.Visibility = Visibility.Collapsed;
         }
 
-        private void PostersBrowserAppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(flag == 0)
-            {
-                String url = String.Format("https://api.themoviedb.org/3/movie/{0}/images?api_key=7888f0042a366f63289ff571b68b7ce0",Mdetail.id);
+        private void PostersBrowserAppBarButton_Click(object sender, RoutedEventArgs e) {
+            if (flag == 0) {
+                String url = String.Format("https://api.themoviedb.org/3/movie/{0}/images?api_key=7888f0042a366f63289ff571b68b7ce0", Mdetail.id);
                 this.Frame.Navigate(typeof(PosterBrowserPage), url);
             }
-            else
-            {
+            else {
                 String url = String.Format("https://api.themoviedb.org/3/tv/{0}/images?api_key=7888f0042a366f63289ff571b68b7ce0", Tdetail.id);
                 this.Frame.Navigate(typeof(PosterBrowserPage), url);
             }
         }
-        private void UpdateTile()
-        {
+        private void UpdateTile() {
             //通过这个方法，我们就可以为动态磁贴的添加做基础。
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
 
@@ -266,8 +298,7 @@ namespace PosterCollection
             int itemCount = 0;
 
             //然后这里是重点：记得分3步走：
-            foreach (var item in viewModel.Starlist)
-            {
+            foreach (var item in viewModel.Starlist) {
                 //1：创建xml对象，这里看你想显示几种动态磁贴，如果想显示正方形和长方形的，那就分别设置一个动态磁贴类型即可。
                 //下面这两个分别是矩形的动态磁贴，和方形的动态磁贴，具体样式，自己可以去微软官网查一查。我这里用到的是换行的文字形式。
                 XmlDocument xml = new XmlDocument();
@@ -289,6 +320,14 @@ namespace PosterCollection
                 if (itemCount++ > 5) break;
             }
 
+        }
+
+        private void shareWithFriends_Click(object sender, RoutedEventArgs e) {
+            var s = sender as FrameworkElement;
+            //var item = (Models.MovieDetail)s.DataContext;
+            //App.title = item.title;
+            //App.poster_path = item.poster_path;
+            DataTransferManager.ShowShareUI();
         }
     }
 }

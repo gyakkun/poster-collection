@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="SkyBlue">
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -164,6 +165,21 @@
 
             </SplitView>
         
-        </Grid>
+
+
+        <ProgressRing
+            x:Name="MyProgressRing"
+            Width="250"
+            Height="250"
+            Foreground="Gray"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />
+
+        <!--Visibility="Visible"
+            IsActive="True"-->
+        
+    </Grid>
 
 </Page>
