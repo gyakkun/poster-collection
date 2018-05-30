@@ -124,26 +124,34 @@ namespace PosterCollection
             viewModel.DeleteStar(s.id);
         }
 
-        private void edit(object sender, RoutedEventArgs e)
+        private async void edit(object sender, RoutedEventArgs e)
         {
+           
+          
+
             dynamic temp = e.OriginalSource;
             selectedItem = temp.DataContext;
-            com.Text = selectedItem.comment;
-            comment.Visibility = Visibility.Visible;
+            Comment.Text = selectedItem.comment;
+
+           await CommentDialog.ShowAsync();
+
+          
+
+
 
         }
 
-        private void ok(object sender, RoutedEventArgs e)
+        private void ok(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             int id = selectedItem.id;
 
-           viewModel.EditComment(id, com.Text);
+            viewModel.EditComment(id, Comment.Text);
             var db = App.conn;
             using (var TodoItem = db.Prepare(App.SQL_UPDATE))
             {
-                TodoItem.Bind(1, com.Text);
+                TodoItem.Bind(1, Comment.Text);
                 TodoItem.Bind(2, id);
-               
+
                 TodoItem.Step();
 
 
@@ -151,6 +159,9 @@ namespace PosterCollection
 
             comment.Visibility = Visibility.Collapsed;
             selectedItem = null;
+            Frame.Navigate(typeof(CollectorItems));
         }
+
+      
     }
 }
