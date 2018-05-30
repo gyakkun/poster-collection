@@ -166,7 +166,7 @@ namespace PosterCollection {
 
             request.Data.SetText(Mdetail.poster_path);
 
-            request.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(Mdetail.poster_path)));
+            //request.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(Mdetail.poster_path)));
             deferal.Complete();
         }
 
