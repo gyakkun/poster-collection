@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PosterCollection.Models;
+using PosterCollection.Service;
 using SQLitePCL;
 
 namespace PosterCollection.ViewModels
@@ -27,7 +28,7 @@ namespace PosterCollection.ViewModels
                 while (SQLiteResult.ROW == statement.Step())
                 {
                     
-                    Starlist.Add(new Star(Convert.ToInt32(statement[0]), (string)statement[1], (string)statement[2], (string)statement[3], Convert.ToInt32(statement[4])));
+                    Starlist.Add(new Star(Convert.ToInt32(statement[0]), (string)statement[1], (string)statement[2], (string)statement[3], (string)statement[4], Convert.ToInt32(statement[5])));
                     
                 }
             }
@@ -86,34 +87,43 @@ namespace PosterCollection.ViewModels
         {
             queryTVResults.Add(result);
         }
-        public void DeleteStar(int id)
+        public void DeleteStar(int id,int type)
         {
             
             for (int i = 0; i < starlist.Count; i++)
             {
-                if (starlist[i].id == id)
+                if (starlist[i].id == id && starlist[i].type == type)
                 {
                     starlist.RemoveAt(i);
                     break;
                 }
             }
-
+            TileService.GenerateTiles();
             using (var statement = App.conn.Prepare(App.SQL_DELETE))
             {
                 statement.Bind(1, id);
-                
+                statement.Bind(2, type);
                 statement.Step();
             }
         }
-        public void EditComment(int id,string comment)
+        public void EditComment(int id,string comment,int type)
         {
             for (int i = 0; i < starlist.Count; i++)
             {
-                if (starlist[i].id == id)
+                if (starlist[i].id == id&&starlist[i].type == type)
                 {
                     starlist[i].comment=comment;
+                    TileService.GenerateTiles();
                     break;
                 }
+            }
+            var db = App.conn;
+            using (var Item = db.Prepare(App.SQL_UPDATE))
+            {
+                Item.Bind(1, comment);
+                Item.Bind(2, id);
+                Item.Bind(3, type);
+                Item.Step();
             }
 
         }
@@ -121,19 +131,20 @@ namespace PosterCollection.ViewModels
         {
 
             starlist.Add(st);
-            
+            TileService.GenerateTiles();
             var db = App.conn;
 
             try
             {
-                using (var TodoItem = db.Prepare(App.SQL_INSERT))
+                using (var Item = db.Prepare(App.SQL_INSERT))
                 {
-                    TodoItem.Bind(1, st.id);
-                    TodoItem.Bind(2, st.title);
-                    TodoItem.Bind(3, st.imagepath);
-                    TodoItem.Bind(4, st.comment);
-                    TodoItem.Bind(5, st.type);
-                    TodoItem.Step();
+                    Item.Bind(1, st.id);
+                    Item.Bind(2, st.title);
+                    Item.Bind(3, st.imagepath);
+                    Item.Bind(4, st.posterpath);
+                    Item.Bind(5, st.comment);
+                    Item.Bind(6, st.type);
+                    Item.Step();
                 }
             }
             catch (Exception ex)

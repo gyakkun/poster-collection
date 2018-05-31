@@ -9,6 +9,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -41,15 +42,15 @@ namespace PosterCollection
                 statement.Step();
             }
         }
-
+        private static TileUpdater tileUpdate;
         static public SQLiteConnection conn { get; set; }
         public static String DB_NAME = "Collector.db";
-        public static String TABLE_NAME = "Collector";
-        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),COMMENT VARCHAR(150),TYPE INTEGER);";
-        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,COMMENT,TYPE) VALUES(?,?,?,?,?);";
+        public static String TABLE_NAME = "Collection";
+        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),POSTER VERCHAR(150), COMMENT VARCHAR(150),TYPE INTEGER);";
+        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,POSTER,COMMENT,TYPE) VALUES(?,?,?,?,?,?);";
         public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
-        public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ?";
-        public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ?";
+        public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ? AND TYPE = ?";
+        public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ? AND TYPE = ?";
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -76,8 +77,18 @@ namespace PosterCollection
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
+        public static TileUpdater GetTileUpdater()
+        {
+            if (tileUpdate == null) tileUpdate = TileUpdateManager.CreateTileUpdaterForApplication();
+            return tileUpdate;
+        }
+
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            tileUpdate = GetTileUpdater();
+            tileUpdate.EnableNotificationQueue(true);
+            tileUpdate.Clear();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;

@@ -1,12 +1,9 @@
 ﻿using PosterCollection.Models;
+using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
-using System.IO;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Data.Xml.Dom;
-using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,7 +12,8 @@ using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace PosterCollection {
+namespace PosterCollection
+{
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -250,19 +248,19 @@ namespace PosterCollection {
 
             if(flag == 0)
             {
-                mystar = new Star(Mdetail.id, Mdetail.title, background, "",0);
+                mystar = new Star(Mdetail.id, Mdetail.title, background,Mdetail.poster_path, "",0);
 
             }
             else
             {
-                mystar = new Star(Tdetail.id, Tdetail.name, background, "", 1);
+                mystar = new Star(Tdetail.id, Tdetail.name, background,Tdetail.poster_path, "", 1);
                 
             }
             viewModel.AddStar(mystar);
-            UpdateTile();
-            
-            var dialog = new MessageDialog("收藏成功", "消息提示");
-            dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+            TileService.GenerateTiles();
+
+            var dialog = new MessageDialog("Mark");
+            dialog.Commands.Add(new UICommand("Ok", cmd => { }, commandId: 0));
             var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Collapsed;
             collected.Visibility = Visibility.Visible;
@@ -270,9 +268,20 @@ namespace PosterCollection {
 
         private async void collected_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.DeleteStar(Mdetail.id);
-            var dialog = new MessageDialog("已取消收藏", "消息提示");
-            dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+            if (flag == 0)
+            {
+                mystar = new Star(Mdetail.id, Mdetail.title, background, Mdetail.poster_path, "", 0);
+
+            }
+            else
+            {
+                mystar = new Star(Tdetail.id, Tdetail.name, background, Tdetail.poster_path, "", 1);
+
+            }
+
+            viewModel.DeleteStar(mystar.id,mystar.type);
+            var dialog = new MessageDialog("Unmark");
+            dialog.Commands.Add(new UICommand("Ok", cmd => { }, commandId: 0));
             var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Visible;
             collected.Visibility = Visibility.Collapsed;
@@ -287,39 +296,6 @@ namespace PosterCollection {
                 String url = String.Format("https://api.themoviedb.org/3/tv/{0}/images?api_key=7888f0042a366f63289ff571b68b7ce0", Tdetail.id);
                 this.Frame.Navigate(typeof(PosterBrowserPage), url);
             }
-        }
-        private void UpdateTile() {
-            //通过这个方法，我们就可以为动态磁贴的添加做基础。
-            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-
-            //这里设置的是所以磁贴都可以为动态
-            updater.EnableNotificationQueue(true);
-            updater.Clear();
-            int itemCount = 0;
-
-            //然后这里是重点：记得分3步走：
-            foreach (var item in viewModel.Starlist) {
-                //1：创建xml对象，这里看你想显示几种动态磁贴，如果想显示正方形和长方形的，那就分别设置一个动态磁贴类型即可。
-                //下面这两个分别是矩形的动态磁贴，和方形的动态磁贴，具体样式，自己可以去微软官网查一查。我这里用到的是换行的文字形式。
-                XmlDocument xml = new XmlDocument();
-                xml.LoadXml(File.ReadAllText("tiles.xml"));
-
-
-                XmlNodeList text = xml.GetElementsByTagName("text");
-                ((XmlElement)text[2]).InnerText = item.title;
-                ((XmlElement)text[3]).InnerText = item.comment;
-                ((XmlElement)text[4]).InnerText = item.title;
-                ((XmlElement)text[5]).InnerText = item.comment;
-                ((XmlElement)text[6]).InnerText = item.title;
-                ((XmlElement)text[7]).InnerText = item.comment;
-
-                //3.然后用Update方法来更新这个磁贴
-                updater.Update(new TileNotification(xml));
-
-                //4.最后这里需要注意的是微软规定动态磁贴的队列数目小于5个，所以这里做出判断。
-                if (itemCount++ > 5) break;
-            }
-
         }
 
         private void shareWithFriends_Click(object sender, RoutedEventArgs e) {

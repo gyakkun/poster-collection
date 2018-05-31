@@ -1,22 +1,13 @@
 ﻿using PosterCollection.Models;
+using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -121,23 +112,15 @@ namespace PosterCollection
         {
             dynamic temp = e.OriginalSource;
             Star s= temp.DataContext;
-            viewModel.DeleteStar(s.id);
+            viewModel.DeleteStar(s.id,s.type);
         }
 
         private async void edit(object sender, RoutedEventArgs e)
         {
-           
-          
-
             dynamic temp = e.OriginalSource;
             selectedItem = temp.DataContext;
             Comment.Text = selectedItem.comment;
-
            await CommentDialog.ShowAsync();
-
-          
-
-
 
         }
 
@@ -145,18 +128,8 @@ namespace PosterCollection
         {
             int id = selectedItem.id;
 
-            viewModel.EditComment(id, Comment.Text);
-            var db = App.conn;
-            using (var TodoItem = db.Prepare(App.SQL_UPDATE))
-            {
-                TodoItem.Bind(1, Comment.Text);
-                TodoItem.Bind(2, id);
-
-                TodoItem.Step();
-
-
-            }
-
+            viewModel.EditComment(id, Comment.Text,selectedItem.type);
+            
             comment.Visibility = Visibility.Collapsed;
             selectedItem = null;
             Frame.Navigate(typeof(CollectorItems));
