@@ -49,7 +49,7 @@ namespace PosterCollection
                 else if(flag == 2)
                 {
                     ImageBrush background = new ImageBrush();
-                    background.ImageSource = new BitmapImage(new Uri(this.BaseUri, "Assets/defaultBackground.png"));
+                    background.ImageSource = new BitmapImage(new Uri(this.BaseUri, "Assets/defaultBackground.jpg"));
                     listGrid.Background = background;
                 }
             }
@@ -73,7 +73,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheMovieDetail.poster_path != null)
                 {
@@ -122,7 +122,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheTVDetail.poster_path != null)
                 {

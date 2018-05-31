@@ -141,7 +141,7 @@
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
-    <Content Include="Assets\defaultBackground.png" />
+    <Content Include="Assets\defaultBackground.jpg" />
     <Content Include="Assets\defaultPhoto.jpg" />
     <Content Include="Assets\defaultPoster.jpg" />
     <Content Include="Assets\music.mp3" />

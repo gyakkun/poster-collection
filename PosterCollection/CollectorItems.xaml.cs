@@ -43,7 +43,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheMovieDetail.poster_path != null)
                 {
@@ -82,7 +82,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheTVDetail.poster_path != null)
                 {
