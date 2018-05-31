@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="SkyBlue">
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -42,20 +43,20 @@
                    OpenPaneLength="200" 
                    CompactPaneLength="56">
                 <SplitView.Pane>
-                    <ListBox SelectionMode="Single" 
-                         SelectionChanged="ListBox_SelectionChanged">
-                        <ListBoxItem Name="Home">
+                <ListBox  SelectionMode="Single" 
+                         SelectionChanged="ListBox_SelectionChanged" SelectedIndex="0">
+                            <ListBoxItem Name="Home">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE80F;" />
                                 <TextBlock FontSize="24" Margin="20,0,0,0">Home</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
-                    <ListBoxItem Name="Collection">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE1CE;" />
-                            <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
-                        </StackPanel>
-                    </ListBoxItem>
+                        <ListBoxItem Name="Collection">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE1CE;" />
+                                <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
                 </ListBox>
                 </SplitView.Pane>
                 <SplitView.Content>
@@ -152,15 +153,33 @@
                             </ComboBox>
                         </StackPanel>
                         <Frame Name="ListFrame" Grid.Row="1" Navigated="ListFrame_Navigated"/>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Name="pageChangePanel" HorizontalAlignment="Right">
-                        <AppBarButton Icon="Previous" Name="PreviousAppBarButton" Click="PreviousAppBarButton_Click" Label="Previous"/>
-                        <AppBarButton Icon="Next" Name="NextAppBarButton" Click="NextAppBarButton_Click" Label="Next"/>
+                    <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" Name="pageChangePanel" HorizontalAlignment="Right">
+                        <MediaElement Source = "Assets/music.mp3" AutoPlay = "True" Name="music" IsLooping="True"/>
+                        <AppBarButton Name="start" Margin="3" Visibility="Collapsed" Icon="Play" FontSize="20" Click="start_Click" HorizontalAlignment="Left" Label="BGM play"/>
+                        <AppBarButton Name="pause" Margin="3" Icon="Pause" FontSize="20" Click="pause_Click" Label="BGM pause"/>
+                        <AppBarButton Icon="Previous" Margin="3" Name="PreviousAppBarButton" Click="PreviousAppBarButton_Click" Label="Previous"/>
+                        <AppBarButton Icon="Next" Margin="3" Name="NextAppBarButton" Click="NextAppBarButton_Click" Label="Next"/>
                     </StackPanel>
                 </Grid>
                 </SplitView.Content>
 
             </SplitView>
         
-        </Grid>
+
+
+        <ProgressRing
+            x:Name="MyProgressRing"
+            Width="250"
+            Height="250"
+            Foreground="Gray"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />
+
+        <!--Visibility="Visible"
+            IsActive="True"-->
+        
+    </Grid>
 
 </Page>

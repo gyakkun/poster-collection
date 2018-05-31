@@ -1,10 +1,14 @@
 ﻿using PosterCollection.Models;
+using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Xml.Linq;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -28,22 +32,47 @@ namespace PosterCollection
         public MainPage()
         {
             this.InitializeComponent();
+            //Show the waiting ring.
+            //MyProgressRing.IsActive = true;
+            //MyProgressRing.Visibility = Visibility.Visible;
+            //载入数据库，初始化ViewModel
             viewModel = ViewModel.Instance;
             InitializeList();
+            //程序开始时，载入了数据库，按照收藏的视频数据生成一次磁贴
+            TileService.GenerateTiles();
         }
+
+        //private  void showProgressRing() {
+        //    MyProgressRing.IsActive = true;
+        //    MyProgressRing.Visibility = Visibility.Visible;
+        //}
+
+        //private  void killProgressRing() {
+        //    MyProgressRing.IsActive = false;
+        //    MyProgressRing.Visibility = Visibility.Collapsed;
+        //}
 
         private async void InitializeList()
         {
             try
             {
+                //如果选择的是电影类型
                 if (VideoTypeComboBox.SelectedIndex == 0)
                 {
-                    String url = String.Format("https://api.themoviedb.org/3/discover/movie?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}{4}", language,page,Mgenre,releaseYear,sortBy);
+                    //API请求，language是电影语言, page是搜索的页，用于支持翻页功能，翻一次页请求一次（API本身的限制只能这么做）, Mgenre电影的类型, releaseYear电影放映日期, sortBy电影以热度还是评分排序
+                    String url = String.Format("https://api.themoviedb.org/3/discover/movie?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}{4}", language, page, Mgenre, releaseYear, sortBy);
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
+
+                    //本想把这句放在最前面，跳转更快，但是ListFrame实例化需要一点时间，放在前面会报空指针的错误，只好先请求网络给程序一点时间
+                    ListFrame.Navigate(typeof(ListPage), 0);
+
+                    //序列化电影列表，通过其解析Json，Models中除了Starlist，其他类都是通过网站json2csharp.com自动生成的
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
                     MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                     QueryMovieList queryMovieList = (QueryMovieList)serializer.ReadObject(ms);
+
+                    //没有这类型的电影
                     if (queryMovieList.total_results == 0)
                     {
                         await new Windows.UI.Popups.MessageDialog("Found nothing, please change the key words and try again! ").ShowAsync();
@@ -53,25 +82,31 @@ namespace PosterCollection
                         viewModel.clear();
                         foreach (var result in queryMovieList.results)
                         {
+                            //该电影有海报
                             if (result.poster_path != null)
                             {
+                                //修改为能访问的网址
                                 result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
                             }
+                            //没有海报
                             else
                             {
+                                //使用默认海报
                                 result.poster_path = "Assets/defaultPoster.jpg";
                             }
+                            //添加到ViewModel
                             viewModel.AddMovieResult(result);
                         }
-                        ListFrame.Navigate(typeof(ListPage), 0);
                     }
 
                 }
                 else
                 {
-                    String url = String.Format("https://api.themoviedb.org/3/discover/tv?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}", language,page,Tgenre,sortBy);
+                    //同理
+                    String url = String.Format("https://api.themoviedb.org/3/discover/tv?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}", language, page, Tgenre, sortBy);
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
+                    ListFrame.Navigate(typeof(ListPage), 1);
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryTVList));
                     MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                     QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
@@ -95,7 +130,6 @@ namespace PosterCollection
                             }
                             viewModel.AddTVResult(result);
                         }
-                        ListFrame.Navigate(typeof(ListPage), 1);
                     }
                 }
             }
@@ -103,21 +137,21 @@ namespace PosterCollection
             {
                 await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
             }
+
         }
+        //汉堡界面的开合
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
-
+        //汉堡界面的选择切换
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Home.IsSelected)
             {
                 TitleTextBlock.Text = "Home";
-                if (ListFrame.CanGoBack)
-                {
-                    ListFrame.GoBack();
-                }
+                InitializeList();
+                
             }
             else if (Collection.IsSelected)
             {
@@ -130,9 +164,12 @@ namespace PosterCollection
         {
             if (Search.Text != "")
             {
-                
-                try
-                {
+                //Show the waiting ring.
+                MyProgressRing.IsActive = true;
+                MyProgressRing.Visibility = Visibility.Visible;
+
+                try {
+                    this.Frame.Navigate(typeof(ListPage), 2);
                     viewModel.clear();
                     for (int i = 1; i <= 5; i++)
                     {
@@ -183,17 +220,22 @@ namespace PosterCollection
                             
                         }
                     }
-                    this.Frame.Navigate(typeof(ListPage), 2);
                 }
                 catch
                 {
                     await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
                 }
+
+                //Kill the waiting ring.
+                MyProgressRing.IsActive = false;
+                MyProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
                 await new Windows.UI.Popups.MessageDialog("Please enter key words first! ").ShowAsync();
             }
+
+
         }
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -349,9 +391,9 @@ namespace PosterCollection
 
         private void ListFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
-            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Visible : Visibility.Collapsed;
+            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))&&!ListFrame.CurrentSourcePageType.Equals(typeof(CollectorItems)) ? Visibility.Visible : Visibility.Collapsed;
             pageChangePanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
-            FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
+            FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void tvGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -469,6 +511,20 @@ namespace PosterCollection
                     break;
             }
             InitializeList();
+        }
+
+        private void pause_Click(object sender, RoutedEventArgs e)
+        {
+            pause.Visibility = Visibility.Collapsed;
+            start.Visibility = Visibility.Visible;
+            music.Pause();
+        }
+
+        private void start_Click(object sender, RoutedEventArgs e)
+        {
+            start.Visibility = Visibility.Collapsed;
+            pause.Visibility = Visibility.Visible;
+            music.Play();
         }
     }
 }

@@ -7,18 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    
 
-    <Grid Background="SkyBlue">
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Image Source="{x:Bind url}"/>
+                <Image Name="image" Source="{x:Bind url}"/>
             </ScrollViewer>
 
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
+
+            <AppBarButton
+                x:Name="shareWithFriends"
+                Icon="People"
+                Label="AppBarButton"
+                Click="shareWithFriends_Click" />
             <AppBarButton Name="savePictureAppBarButton" Icon="Save" Label="Save" Click="savePictureAppBarButton_Click"/>
+            
         </CommandBar>
     </Page.BottomAppBar>
     

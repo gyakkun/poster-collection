@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tile>
+  <visual branding="name">
+
+    <binding template="TileSmall">
+      <text hint-style="title" hint-wrap ="true">title</text>
+      <image src="Assets/defaultBackground.png" placement="background"/>
+    </binding>
+
+    <binding template="TileMedium">
+      <image  placement="background" src="Assets/defaultBackground.png"  />
+      <group>
+        <subgroup>
+          <text hint-style="title" hint-wrap ="true">title</text>
+          <text hint-style="captionSubtle" hint-wrap="true">comment</text>
+        </subgroup>
+      </group>
+    </binding>
+
+    <binding template="TileWide"  displayName="Collected Video">
+      <image placement="background" src="Assets/defaultBackground.png"  />
+      <group>
+        <subgroup hint-weight="1">
+          <image src="postersrc" />
+        </subgroup>
+        <subgroup hint-weight="1">
+          <text hint-style="title" hint-wrap ="true">title</text>
+          <text hint-style="captionSubtle" hint-wrap="true" hint-maxLines="0">comment</text>
+        </subgroup>
+      </group>
+    </binding>
+
+    <binding template="TileLarge" displayName="Collected Video">
+      <group>
+        <subgroup hint-weight="1"/>
+        <subgroup hint-weight="2">
+          <image src="postersrc"/>
+        </subgroup>
+        <subgroup hint-weight="1"/>
+      </group>
+      <group >
+        <subgroup>
+          <text hint-style="title" hint-wrap ="true" hint-align = "center">title</text>
+          <text hint-style="captionSubtle" hint-wrap="true" hint-maxLines="0" hint-align = "center">comment</text>
+        </subgroup>
+      </group>
+      <image src="Assets/defaultBackground.png" placement="background"/>
+    </binding>
+
+
+  </visual>
+</tile>

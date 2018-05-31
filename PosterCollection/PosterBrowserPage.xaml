@@ -17,7 +17,8 @@
         </DataTemplate>
     </Page.Resources>
     <ScrollViewer>
-        <Grid Background="SkyBlue">
+        <Grid
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <StackPanel>
                 <TextBlock Text="Posters: " Name="posterTextBlock" FontWeight="Bold" FontSize="24" Margin="10"/>
                 <GridView ItemsSource="{x:Bind allPosters}" 
