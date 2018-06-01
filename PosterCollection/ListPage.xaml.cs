@@ -70,7 +70,8 @@ namespace PosterCollection
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(MovieDetail));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
-
+                //跳转到详情页面
+                this.Frame.Navigate(typeof(DetailPage), 0);
                 //电影背景改为可访问网址或默认背景
                 if (viewModel.TheMovieDetail.backdrop_path != null)
                 {
@@ -101,8 +102,7 @@ namespace PosterCollection
                         cast.profile_path = "Assets/defaultPhoto.jpg";
                     }
                 }
-                //跳转到详情页面
-                this.Frame.Navigate(typeof(DetailPage), 0);
+                
             }
             catch
             {
@@ -122,6 +122,7 @@ namespace PosterCollection
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TVDetail));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheTVDetail = (TVDetail)serializer.ReadObject(ms);
+                this.Frame.Navigate(typeof(DetailPage), 1);
                 //背景
                 if (viewModel.TheTVDetail.backdrop_path != null)
                 {
@@ -152,7 +153,7 @@ namespace PosterCollection
                         season.poster_path = "Assets/defaultPoster.jpg";
                     }
                 }
-                this.Frame.Navigate(typeof(DetailPage), 1);
+                
             }
             catch
             {

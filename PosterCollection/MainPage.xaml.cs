@@ -28,6 +28,7 @@ namespace PosterCollection
         private string Tgenre = "";
         private string releaseYear = "";
         private string sortBy = "&sort_by=popularity.desc";
+        private bool first = true;
 
         public MainPage()
         {
@@ -56,6 +57,10 @@ namespace PosterCollection
         {
             try 
             {
+                if (!first)
+                {
+                    ListFrame.Navigate(typeof(ListPage), VideoTypeComboBox.SelectedIndex);
+                }
                 //如果选择的是电影类型
                 if (VideoTypeComboBox.SelectedIndex == 0)
                 {
@@ -65,8 +70,11 @@ namespace PosterCollection
                     String Jresult = await client.GetStringAsync(url);
 
                     //本想把这句放在最前面，跳转更快，但是ListFrame实例化需要一点时间，放在前面会报空指针的错误，只好先请求网络给程序一点时间
-                    ListFrame.Navigate(typeof(ListPage), 0);
-
+                    if (first)
+                    {
+                        first = false;
+                        ListFrame.Navigate(typeof(ListPage), 0);
+                    }
                     //Where is the Show progress ring code? Not here!
                     //Written in XAML for initialization!!!                    
 
@@ -110,8 +118,11 @@ namespace PosterCollection
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
 
-                    ListFrame.Navigate(typeof(ListPage), 1);
-
+                    if (first)
+                    {
+                        first = false;
+                        ListFrame.Navigate(typeof(ListPage), 1);
+                    }
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryTVList));
                     MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                     QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
