@@ -16,6 +16,18 @@
                 <Image Name="image" Source="{x:Bind url}"/>
             </ScrollViewer>
 
+        <!--<ProgressRing
+            x:Name="ProgressRingInShowPosterPage"
+            Width="250"
+            Height="250"
+            Foreground="DarkRed"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            Visibility="Visible"
+            IsActive="True"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />-->
+
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>

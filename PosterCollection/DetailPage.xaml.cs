@@ -31,7 +31,7 @@ namespace PosterCollection
 
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) {
+        protected async override void OnNavigatedTo(NavigationEventArgs e) {
             viewModel = ViewModel.Instance;
             
             if (e.Parameter is int) {

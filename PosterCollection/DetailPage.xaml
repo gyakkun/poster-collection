@@ -634,6 +634,18 @@
             </Grid>
         </ScrollViewer>
 
+        <ProgressRing
+            x:Name="ProgressRingInDetailPage"
+            Width="250"
+            Height="250"
+            Foreground="DarkBlue"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            Visibility="Visible"
+            IsActive="True"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />
+
     </Grid>
 
     <Page.BottomAppBar>
