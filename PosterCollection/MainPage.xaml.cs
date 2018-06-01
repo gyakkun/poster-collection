@@ -6,16 +6,12 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Xml.Linq;
-using Windows.Data.Xml.Dom;
-using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
-namespace PosterCollection
-{
+namespace PosterCollection {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>

@@ -1,5 +1,4 @@
 ﻿using PosterCollection.Models;
-using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
 using System.IO;
@@ -11,8 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace PosterCollection
-{
+namespace PosterCollection {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
