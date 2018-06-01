@@ -157,6 +157,8 @@ namespace PosterCollection
         {
             if (Search.Text != "")
             {
+                ProgressRingInListPage.IsActive = true;
+                ProgressRingInListPage.Visibility = Visibility.Visible;
                 try
                 {
                     String url = String.Format("https://api.themoviedb.org/3/search/movie?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}", Search.Text);
@@ -209,6 +211,11 @@ namespace PosterCollection
                 {
                     await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
                 }
+                
+                //Kill the waiting ring.
+                ProgressRingInListPage.IsActive = false;
+                ProgressRingInListPage.Visibility = Visibility.Collapsed;
+
             }
             else
             {

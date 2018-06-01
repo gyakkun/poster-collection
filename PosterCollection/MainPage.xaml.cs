@@ -172,8 +172,8 @@ namespace PosterCollection
             if (Search.Text != "")
             {
                 //Show the waiting ring.
-                //MyProgressRing.IsActive = true;
-                //MyProgressRing.Visibility = Visibility.Visible;
+                MyProgressRing.IsActive = true;
+                MyProgressRing.Visibility = Visibility.Visible;
 
                 try {
                     this.Frame.Navigate(typeof(ListPage), 2);
@@ -234,8 +234,8 @@ namespace PosterCollection
                 }
 
                 //Kill the waiting ring.
-                //MyProgressRing.IsActive = false;
-                //MyProgressRing.Visibility = Visibility.Collapsed;
+                MyProgressRing.IsActive = false;
+                MyProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
