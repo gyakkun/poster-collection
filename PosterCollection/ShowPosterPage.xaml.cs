@@ -38,7 +38,7 @@ namespace PosterCollection
             }
             
         }
-
+        //保存图片到本地
         private async void savePictureAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             FileSavePicker fileSavePicker = new FileSavePicker();
@@ -53,6 +53,7 @@ namespace PosterCollection
                 // The user cancelled the picking operation
                 return;
             }
+            //请求流文件保存即可保存高清图
             HttpClient client = new HttpClient();
             Stream Stream = await client.GetStreamAsync(new Uri(url));
             using (IRandomAccessStream stream = await outputFile.OpenAsync(FileAccessMode.ReadWrite))
@@ -62,7 +63,7 @@ namespace PosterCollection
 
             }
         }
-
+        //分享图片信息编辑
         private void OnShareDataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
 
@@ -84,6 +85,7 @@ namespace PosterCollection
                 deferral.Complete();
             }
         }
+        //分享图片
         private void shareWithFriends_Click(object sender, RoutedEventArgs e)
         {
             var s = sender as FrameworkElement;

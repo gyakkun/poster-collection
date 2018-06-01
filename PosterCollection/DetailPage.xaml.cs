@@ -24,7 +24,6 @@ namespace PosterCollection
         private TVDetail Tdetail;
         private int flag;
 
-
         private Star mystar;
         public DetailPage() {
             this.InitializeComponent();
@@ -37,14 +36,13 @@ namespace PosterCollection
             
             if (e.Parameter is int) {
                 flag = (int)e.Parameter;
-                
+                //电影详情界面编辑
                 if (flag == 0) {
 
-                    int id = viewModel.TheMovieDetail.id;
-
+                    //遍历查询该项是不是已经被收藏，以决定收藏键的隐现
                     for (int i = 0; i < viewModel.Starlist.Count; i++)
                     {
-                        if (viewModel.Starlist[i].id == id)
+                        if (viewModel.Starlist[i].id == viewModel.TheMovieDetail.id && viewModel.Starlist[i].type == 0)
                         {
                             collect.Visibility = Visibility.Collapsed;
                             collected.Visibility = Visibility.Visible;
@@ -108,13 +106,12 @@ namespace PosterCollection
                     runtimeTextBlock.Text = Mdetail.runtime + " minutes";
 
                 }
+                //电视剧详情界面编辑
                 else if (flag == 1) {
-
-                    int id = viewModel.TheTVDetail.id;
 
                     for (int i = 0; i < viewModel.Starlist.Count; i++)
                     {
-                        if (viewModel.Starlist[i].id == id)
+                        if (viewModel.Starlist[i].id == viewModel.TheTVDetail.id && viewModel.Starlist[i].type == 1)
                         {
                             collect.Visibility = Visibility.Collapsed;
                             collected.Visibility = Visibility.Visible;
@@ -176,7 +173,7 @@ namespace PosterCollection
             }
             DataTransferManager.GetForCurrentView().DataRequested += OnShareDataRequested;
         }
-
+        //分享信息逻辑
         private void OnShareDataRequested(DataTransferManager sender, DataRequestedEventArgs args) {
 
             DataRequest request = args.Request;
@@ -223,7 +220,7 @@ namespace PosterCollection
             }
         }
 
-
+        //点击电视剧界面的某一季海报
         private async void seasonsGridView_ItemClick(object sender, ItemClickEventArgs e) {
             var item = (Season)e.ClickedItem;
             string message = "Season Name:\t" + item.name + "\n\n" +
@@ -235,7 +232,7 @@ namespace PosterCollection
             }
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
-
+        //点击电影界面的某一个演员头像
         private async void starGridView_ItemClick(object sender, ItemClickEventArgs e) {
             var item = (Cast)e.ClickedItem;
             string message = "Name:\t\t" + item.name + "\n\n";
@@ -243,7 +240,7 @@ namespace PosterCollection
 
             await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
         }
-
+        //收藏
         private async void collect_Click(object sender, RoutedEventArgs e) {
 
             if(flag == 0)
@@ -259,13 +256,13 @@ namespace PosterCollection
             viewModel.AddStar(mystar);
             TileService.GenerateTiles();
 
-            var dialog = new MessageDialog("Mark");
+            var dialog = new MessageDialog("Add to collection successfully!","Mark");
             dialog.Commands.Add(new UICommand("Ok", cmd => { }, commandId: 0));
             var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Collapsed;
             collected.Visibility = Visibility.Visible;
         }
-
+        //取消收藏
         private async void collected_Click(object sender, RoutedEventArgs e)
         {
             if (flag == 0)
@@ -280,13 +277,13 @@ namespace PosterCollection
             }
 
             viewModel.DeleteStar(mystar.id,mystar.type);
-            var dialog = new MessageDialog("Unmark");
+            var dialog = new MessageDialog("Remove from collection successfully!", "Unmark");
             dialog.Commands.Add(new UICommand("Ok", cmd => { }, commandId: 0));
             var result = await dialog.ShowAsync();
             collect.Visibility = Visibility.Visible;
             collected.Visibility = Visibility.Collapsed;
         }
-
+        //预览所有海报
         private void PostersBrowserAppBarButton_Click(object sender, RoutedEventArgs e) {
             if (flag == 0) {
                 String url = String.Format("https://api.themoviedb.org/3/movie/{0}/images?api_key=7888f0042a366f63289ff571b68b7ce0", Mdetail.id);
@@ -297,7 +294,7 @@ namespace PosterCollection
                 this.Frame.Navigate(typeof(PosterBrowserPage), url);
             }
         }
-
+        //分享该视频
         private void shareWithFriends_Click(object sender, RoutedEventArgs e) {
             var s = sender as FrameworkElement;
             //var item = (Models.MovieDetail)s.DataContext;

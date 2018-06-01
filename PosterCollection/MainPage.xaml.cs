@@ -106,7 +106,9 @@ namespace PosterCollection
                     String url = String.Format("https://api.themoviedb.org/3/discover/tv?api_key=7888f0042a366f63289ff571b68b7ce0&include_adult=false{0}&page={1}{2}{3}", language, page, Tgenre, sortBy);
                     HttpClient client = new HttpClient();
                     String Jresult = await client.GetStringAsync(url);
+
                     ListFrame.Navigate(typeof(ListPage), 1);
+
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryTVList));
                     MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                     QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
@@ -149,12 +151,14 @@ namespace PosterCollection
         {
             if (Home.IsSelected)
             {
+                //主界面
                 TitleTextBlock.Text = "Home";
                 InitializeList();
                 
             }
             else if (Collection.IsSelected)
             {
+                //收藏界面
                 ListFrame.Navigate(typeof(CollectorItems));
                 TitleTextBlock.Text = "Collection";
             }
@@ -169,17 +173,17 @@ namespace PosterCollection
                 MyProgressRing.Visibility = Visibility.Visible;
 
                 try {
-                    this.Frame.Navigate(typeof(ListPage), 2);
-                    viewModel.clear();
+                    int flag = 0;
                     for (int i = 1; i <= 5; i++)
                     {
+                        //电影请求
                         String url = String.Format("https://api.themoviedb.org/3/search/movie?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}&page={1}", Search.Text,i);
                         HttpClient client = new HttpClient();
                         String Jresult = await client.GetStringAsync(url);
                         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
                         MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                         QueryMovieList queryMovieList = (QueryMovieList)serializer.ReadObject(ms);
-
+                        //电视剧请求
                         url = String.Format("https://api.themoviedb.org/3/search/tv?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}&page={1}", Search.Text,i);
                         Jresult = await client.GetStringAsync(url);
                         serializer = new DataContractJsonSerializer(typeof(QueryTVList));
@@ -189,9 +193,16 @@ namespace PosterCollection
                         if (queryMovieList.total_results + queryTVList.total_results == 0)
                         {
                             await new Windows.UI.Popups.MessageDialog("Found nothing, please change the key words and try again! ").ShowAsync();
+                            break;
                         }
                         else
                         {
+                            if(flag == 0)
+                            {
+                                viewModel.clear();
+                                this.Frame.Navigate(typeof(ListPage), 2);
+                            }
+                            flag++;
                             //viewModel.clear();
                             foreach (var result in queryMovieList.results)
                             {
@@ -237,7 +248,7 @@ namespace PosterCollection
 
 
         }
-
+        //语言选择改变
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -261,7 +272,7 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //视频类型选择改变（电影还是电视剧）
         private void VideoTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -293,7 +304,7 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //电影类别改变
         private void movieGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -362,7 +373,7 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //上一页
         private void PreviousAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             if(page > 1)
@@ -371,7 +382,7 @@ namespace PosterCollection
                 InitializeList();
             }
         }
-
+        //下一页
         private void NextAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             if(page < 1000)
@@ -380,7 +391,7 @@ namespace PosterCollection
                 InitializeList();
             }
         }
-
+        //主界面的后退键，用于在主界面点击了某个视频跳转到详情等界面
         private void BackAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             if (ListFrame.CanGoBack)
@@ -388,14 +399,14 @@ namespace PosterCollection
                 ListFrame.GoBack();
             }
         }
-
+        //监控ListFrame，以便于决定某些空间的是否可见
         private void ListFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
             BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))&&!ListFrame.CurrentSourcePageType.Equals(typeof(CollectorItems)) ? Visibility.Visible : Visibility.Collapsed;
             pageChangePanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
             FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))? Visibility.Collapsed : Visibility.Visible;
         }
-
+        //电视剧类别改变
         private void tvGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -455,7 +466,7 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //视频上映年份改变
         private void ReleaseYearComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -497,7 +508,7 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //排序类型改变
         private void SortByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             page = 1;
@@ -512,14 +523,14 @@ namespace PosterCollection
             }
             InitializeList();
         }
-
+        //BGM暂停
         private void pause_Click(object sender, RoutedEventArgs e)
         {
             pause.Visibility = Visibility.Collapsed;
             start.Visibility = Visibility.Visible;
             music.Pause();
         }
-
+        //BGM开始
         private void start_Click(object sender, RoutedEventArgs e)
         {
             start.Visibility = Visibility.Collapsed;

@@ -8,7 +8,7 @@ namespace PosterCollection.Service
 {
     class TileService
     {
-
+        //生成一个磁贴
         public static void SendTileNotification(Star item)
          {
                 XDocument xdoc = XDocument.Load("tiles.xml");
@@ -28,6 +28,7 @@ namespace PosterCollection.Service
                 App.GetTileUpdater().Update(notification);
 
          }
+        //生成一组磁贴
         public static void GenerateTiles()
         {
             foreach (var item in ViewModel.Instance.Starlist)

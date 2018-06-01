@@ -12,10 +12,15 @@ namespace PosterCollection.ViewModels
 {
     class ViewModel
     {
+        //电影列表
         private ObservableCollection<MovieResult> queryMovieResults = new ObservableCollection<MovieResult>();
+        //电视剧列表
         private ObservableCollection<TVResult> queryTVResults = new ObservableCollection<TVResult>();
+        //收藏列表
         private ObservableCollection<Star> starlist = new ObservableCollection<Star>();
+        //某电影详情
         private MovieDetail theMovieDetail = new MovieDetail();
+        //某电视剧详情
         private TVDetail theTVDetail = new TVDetail();
 
         private static ViewModel instance;
