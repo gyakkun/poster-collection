@@ -165,6 +165,8 @@ namespace PosterCollection
         {
             if (Search.Text != "")
             {
+                ProgressRingInListPage.IsActive = true;
+                ProgressRingInListPage.Visibility = Visibility.Visible;
                 try
                 {
                     int tmp = 0;
@@ -228,6 +230,11 @@ namespace PosterCollection
                 {
                     await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
                 }
+                
+                //Kill the waiting ring.
+                ProgressRingInListPage.IsActive = false;
+                ProgressRingInListPage.Visibility = Visibility.Collapsed;
+
             }
             else
             {

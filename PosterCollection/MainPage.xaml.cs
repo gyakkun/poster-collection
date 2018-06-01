@@ -54,7 +54,7 @@ namespace PosterCollection
 
         private async void InitializeList()
         {
-            try
+            try 
             {
                 //如果选择的是电影类型
                 if (VideoTypeComboBox.SelectedIndex == 0)
@@ -66,6 +66,9 @@ namespace PosterCollection
 
                     //本想把这句放在最前面，跳转更快，但是ListFrame实例化需要一点时间，放在前面会报空指针的错误，只好先请求网络给程序一点时间
                     ListFrame.Navigate(typeof(ListPage), 0);
+
+                    //Where is the Show progress ring code? Not here!
+                    //Written in XAML for initialization!!!                    
 
                     //序列化电影列表，通过其解析Json，Models中除了Starlist，其他类都是通过网站json2csharp.com自动生成的
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
@@ -135,11 +138,15 @@ namespace PosterCollection
                     }
                 }
             }
-            catch
+            catch 
             {
                 await new Windows.UI.Popups.MessageDialog("Opps! Something wrong happened to the connection, please check your network and try again! ").ShowAsync();
             }
-
+            finally 
+            {
+                MyProgressRing.IsActive = false;
+                MyProgressRing.Visibility = Visibility.Collapsed;
+            }
         }
         //汉堡界面的开合
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
