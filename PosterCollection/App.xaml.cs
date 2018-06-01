@@ -43,6 +43,7 @@ namespace PosterCollection
             }
         }
         private static TileUpdater tileUpdate;
+        //数据库管理语句
         static public SQLiteConnection conn { get; set; }
         public static String DB_NAME = "Collector.db";
         public static String TABLE_NAME = "Collection";

@@ -34,18 +34,21 @@ namespace PosterCollection
             if (e.Parameter is int)
             {
                 int flag = (int)e.Parameter;
+                //主界面ListFrame电影类导航到该界面，只显示电影
                 if (flag == 0)
                 {
                     searchGrid.Visibility = Visibility.Collapsed;
                     TVPanel.Visibility = Visibility.Collapsed;
                     movieTextBlock.Visibility = Visibility.Collapsed;
                 }
+                //主界面ListFrame电视剧类导航到该界面，只显示电视剧
                 else if(flag == 1)
                 {
                     searchGrid.Visibility = Visibility.Collapsed;
                     MoviePanel.Visibility = Visibility.Collapsed;
                     tvTextBlock.Visibility = Visibility.Collapsed;
                 }
+                //搜索导航到该界面，都要显示
                 else if(flag == 2)
                 {
                     ImageBrush background = new ImageBrush();
@@ -54,12 +57,13 @@ namespace PosterCollection
                 }
             }
         }
-
+        //点击了一个电影
         private async void GridView_MovieItemClick(object sender, ItemClickEventArgs e)
         {
             try
             {
                 var item = (MovieResult)e.ClickedItem;
+                //API访问该项的详细信息，剩下的请参看主界面的注释
                 String url = String.Format("https://api.themoviedb.org/3/movie/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
                 HttpClient client = new HttpClient();
                 String Jresult = await client.GetStringAsync(url);
@@ -67,6 +71,7 @@ namespace PosterCollection
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheMovieDetail = (MovieDetail)serializer.ReadObject(ms);
 
+                //电影背景改为可访问网址或默认背景
                 if (viewModel.TheMovieDetail.backdrop_path != null)
                 {
                     viewModel.TheMovieDetail.backdrop_path = "https://image.tmdb.org/t/p/original" + viewModel.TheMovieDetail.backdrop_path;
@@ -75,6 +80,7 @@ namespace PosterCollection
                 {
                     viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.png";
                 }
+                //电影海报改为可访问网址或默认海报
                 if (viewModel.TheMovieDetail.poster_path != null)
                 {
                     viewModel.TheMovieDetail.poster_path = "https://image.tmdb.org/t/p/w500" + viewModel.TheMovieDetail.poster_path;
@@ -83,7 +89,7 @@ namespace PosterCollection
                 {
                     viewModel.TheMovieDetail.poster_path = "Assets/defaultPoster.jpg";
                 }
-
+                //演员头像改为可访问网址或默认头像
                 foreach (var cast in viewModel.TheMovieDetail.casts.cast)
                 {
                     if (cast.profile_path != null)
@@ -95,7 +101,7 @@ namespace PosterCollection
                         cast.profile_path = "Assets/defaultPhoto.jpg";
                     }
                 }
-
+                //跳转到详情页面
                 this.Frame.Navigate(typeof(DetailPage), 0);
             }
             catch
@@ -104,10 +110,11 @@ namespace PosterCollection
             }
             
         }
-
+        //点击一个电视剧
         private async void GridView_TVItemClick(object sender, ItemClickEventArgs e)
         {
             try { 
+                //同理
                 var item = (TVResult)e.ClickedItem;
                 String url = String.Format("https://api.themoviedb.org/3/tv/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
                 HttpClient client = new HttpClient();
@@ -115,7 +122,7 @@ namespace PosterCollection
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TVDetail));
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
                 viewModel.TheTVDetail = (TVDetail)serializer.ReadObject(ms);
-
+                //背景
                 if (viewModel.TheTVDetail.backdrop_path != null)
                 {
                     viewModel.TheTVDetail.backdrop_path = "https://image.tmdb.org/t/p/original" + viewModel.TheTVDetail.backdrop_path;
@@ -124,6 +131,7 @@ namespace PosterCollection
                 {
                     viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.png";
                 }
+                //海报
                 if (viewModel.TheTVDetail.poster_path != null)
                 {
                     viewModel.TheTVDetail.poster_path = "https://image.tmdb.org/t/p/w500" + viewModel.TheTVDetail.poster_path;
@@ -132,7 +140,7 @@ namespace PosterCollection
                 {
                     viewModel.TheTVDetail.poster_path = "Assets/defaultPoster.jpg";
                 }
-
+                //每一季的海报
                 foreach (var season in viewModel.TheTVDetail.seasons)
                 {
                     if (season.poster_path != null)
@@ -152,56 +160,67 @@ namespace PosterCollection
             }
         }
                 
-
+        //关键词搜索
         private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             if (Search.Text != "")
             {
                 try
                 {
-                    String url = String.Format("https://api.themoviedb.org/3/search/movie?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}", Search.Text);
-                    HttpClient client = new HttpClient();
-                    String Jresult = await client.GetStringAsync(url);
-                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
-                    MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
-                    QueryMovieList queryMovieList = (QueryMovieList)serializer.ReadObject(ms);
-
-                    url = String.Format("https://api.themoviedb.org/3/search/tv?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}", Search.Text);
-                    Jresult = await client.GetStringAsync(url);
-                    serializer = new DataContractJsonSerializer(typeof(QueryTVList));
-                    ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
-                    QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
-
-                    if (queryMovieList.total_results + queryTVList.total_results == 0)
+                    int tmp = 0;
+                    
+                    for (int i = 1; i <= 5; i++)
                     {
-                        await new Windows.UI.Popups.MessageDialog("Found nothing, please change the key words and try again! ").ShowAsync();
-                    }
-                    else
-                    {
-                        viewModel.clear();
-                        foreach (var result in queryMovieList.results)
+                        //请求电影
+                        String url = String.Format("https://api.themoviedb.org/3/search/movie?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}&page={1}", Search.Text,i);
+                        HttpClient client = new HttpClient();
+                        String Jresult = await client.GetStringAsync(url);
+                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QueryMovieList));
+                        MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+                        QueryMovieList queryMovieList = (QueryMovieList)serializer.ReadObject(ms);
+                        //请求电视剧
+                        url = String.Format("https://api.themoviedb.org/3/search/tv?api_key=7888f0042a366f63289ff571b68b7ce0&query={0}&page={1}", Search.Text,i);
+                        Jresult = await client.GetStringAsync(url);
+                        serializer = new DataContractJsonSerializer(typeof(QueryTVList));
+                        ms = new MemoryStream(Encoding.UTF8.GetBytes(Jresult));
+                        QueryTVList queryTVList = (QueryTVList)serializer.ReadObject(ms);
+
+                        if (queryMovieList.total_results + queryTVList.total_results == 0)
                         {
-                            if (result.poster_path != null)
-                            {
-                                result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
-                            }
-                            else
-                            {
-                                result.poster_path = "Assets/defaultPoster.jpg";
-                            }
-                            viewModel.AddMovieResult(result);
+                            await new Windows.UI.Popups.MessageDialog("Found nothing, please change the key words and try again! ").ShowAsync();
+                            break;
                         }
-                        foreach (var result in queryTVList.results)
+                        else
                         {
-                            if (result.poster_path != null)
+                            if(tmp == 0)
                             {
-                                result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
+                                viewModel.clear();
                             }
-                            else
+                            tmp ++;
+                            foreach (var result in queryMovieList.results)
                             {
-                                result.poster_path = "Assets/defaultPoster.jpg";
+                                if (result.poster_path != null)
+                                {
+                                    result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
+                                }
+                                else
+                                {
+                                    result.poster_path = "Assets/defaultPoster.jpg";
+                                }
+                                viewModel.AddMovieResult(result);
                             }
-                            viewModel.AddTVResult(result);
+                            foreach (var result in queryTVList.results)
+                            {
+                                if (result.poster_path != null)
+                                {
+                                    result.poster_path = "https://image.tmdb.org/t/p/w500" + result.poster_path;
+                                }
+                                else
+                                {
+                                    result.poster_path = "Assets/defaultPoster.jpg";
+                                }
+                                viewModel.AddTVResult(result);
+                            }
                         }
                     }
                 }
