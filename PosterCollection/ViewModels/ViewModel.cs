@@ -28,7 +28,7 @@ namespace PosterCollection.ViewModels
                 while (SQLiteResult.ROW == statement.Step())
                 {
                     
-                    Starlist.Add(new Star(Convert.ToInt32(statement[0]), (string)statement[1], (string)statement[2], (string)statement[3], (string)statement[4], Convert.ToInt32(statement[5])));
+                    Starlist.Add(new Star(Convert.ToInt32(statement[1]), (string)statement[2], (string)statement[3], (string)statement[4], (string)statement[5], Convert.ToInt32(statement[6])));
                     
                 }
             }
@@ -81,11 +81,49 @@ namespace PosterCollection.ViewModels
         public void AddMovieResult(MovieResult result)
         {
             queryMovieResults.Add(result);
+
+            var db = App.conn;
+
+            try
+            {
+                using (var Item = db.Prepare("INSERT INTO Movies (Id,Title,overview,Type) VALUES(?,?,?,?);"))
+                {
+                    Item.Bind(1, result.id);
+                    Item.Bind(2, result.title);
+                    Item.Bind(3, result.overview);
+                    Item.Bind(4, 0);
+                 
+                    Item.Step();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public void AddTVResult(TVResult result)
         {
             queryTVResults.Add(result);
+
+            var db = App.conn;
+
+            try
+            {
+                using (var Item = db.Prepare("INSERT INTO Movies (Id,Title,overview,Type) VALUES(?,?,?,?);"))
+                {
+                    Item.Bind(1, result.id);
+                    Item.Bind(2, result.name);
+                    Item.Bind(3, result.overview);
+                    Item.Bind(4, 1);
+
+                    Item.Step();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
         public void DeleteStar(int id,int type)
         {

@@ -4,11 +4,11 @@
 
     <binding template="TileSmall">
       <text hint-style="title" hint-wrap ="true">title</text>
-      <image src="Assets/defaultBackground.png" placement="background"/>
+      <image src="backgroundsrc" placement="background"/>
     </binding>
 
     <binding template="TileMedium">
-      <image  placement="background" src="Assets/defaultBackground.png"  />
+      <image  placement="background" src="backgroundsrc"  />
       <group>
         <subgroup>
           <text hint-style="title" hint-wrap ="true">title</text>
@@ -18,7 +18,7 @@
     </binding>
 
     <binding template="TileWide"  displayName="Collected Video">
-      <image placement="background" src="Assets/defaultBackground.png"  />
+      <image placement="background" src="backgroundsrc"  />
       <group>
         <subgroup hint-weight="1">
           <image src="postersrc" />
@@ -44,7 +44,7 @@
           <text hint-style="captionSubtle" hint-wrap="true" hint-maxLines="0" hint-align = "center">comment</text>
         </subgroup>
       </group>
-      <image src="Assets/defaultBackground.png" placement="background"/>
+      <image src="backgroundsrc" placement="background"/>
     </binding>
 
 
