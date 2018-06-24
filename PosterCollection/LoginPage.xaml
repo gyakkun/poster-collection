@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="PosterCollection.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PosterCollection"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="275" Height="400">
+        <StackPanel Margin="10">
+            <TextBlock Text="登录系统" FontFamily="Microsoft YaHei" FontSize="32" FontWeight="Bold" Margin="10"/>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="角色" FontSize="24" Margin="5"/>
+                <ComboBox Name="typeComboBox" Width="150" Margin="5">
+                    <ComboBoxItem Content="管理员"/>
+                    <ComboBoxItem Content="用户"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="账号" FontSize="24" Margin="5"/>
+                <TextBox Name="usernameTextBox" Width="150" Margin="5"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="密码" FontSize="24" Margin="5"/>
+                <PasswordBox Name="passwordBox"  Width="150" Margin="5" />
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <Button Name="loginButton" Margin="5,5,105,5" Content="登录" Click="loginButton_Click"/>
+                <Button Name="registerButton" Content="注册" Margin="5" Click="registerButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

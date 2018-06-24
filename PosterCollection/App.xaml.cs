@@ -47,16 +47,29 @@ namespace PosterCollection
             {
                 statement.Step();
             }
+
+            using (var statement = conn.Prepare(SQL_CREATE_USER_TABLE))
+            {
+                statement.Step();
+            }
         }
         private static TileUpdater tileUpdate;
         static public SQLiteConnection conn { get; set; }
         public static String DB_NAME = "Collector.db";
-        public static String TABLE_NAME = "Collection"a;
-        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,MovieID INTEGER NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),POSTER VERCHAR(150), COMMENT VARCHAR(150),TYPE INTEGER ,UID INTEGER, FOREIGN KEY(MovieID) REFERENCES Movies(Id) );";
-        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(MovieID,Title,PATH,POSTER,COMMENT,TYPE) VALUES(?,?,?,?,?,?);";
-        public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
+        public static String TABLE_NAME = "Collection";
+        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,MovieID INTEGER NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),POSTER VERCHAR(150), COMMENT VARCHAR(150),TYPE INTEGER ,UID INTEGER, FOREIGN KEY(MovieID) REFERENCES Movies(Id),FOREIGN KEY(UID) REFERENCES UserTable(Id));";
+        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(MovieID,Title,PATH,POSTER,COMMENT,TYPE,UID) VALUES(?,?,?,?,?,?,?);";
+        public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME+" WHERE UID = (?)";
         public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE MovieID = ? AND TYPE = ?";
         public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE MovieID = ? AND TYPE = ?";
+
+
+        public static String USER_TABLE = "UserTable";
+        public static String SQL_CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS " + USER_TABLE + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Username VARCHAR(100),Password VARCHAR(100),Email VARCHAR(50),Phone VARCHAR(20), Role INTERGER);";
+        public static String SQL_INSERT_USER = "INSERT INTO " + USER_TABLE + "(UserName,Password,Email,Phone,Role) VALUES(?,?,?,?,?);";
+        public static String SQL_QUERY_USER = "SELECT * FROM " + USER_TABLE;
+        public static String SQL_DELETE_USER = "DELETE FROM " + USER_TABLE + " WHERE Id = ?";
+        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?, Password = ?, Email = ?, Phone = ? WHERE Id = ?";
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -74,7 +87,7 @@ namespace PosterCollection
 
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack && !((Frame)sender).CurrentSourcePageType.Equals(typeof(MainPage)) ?
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack && !((Frame)sender).CurrentSourcePageType.Equals(typeof(LoginPage)) ?
                 AppViewBackButtonVisibility.Visible : Windows.UI.Core.AppViewBackButtonVisibility.Collapsed;
         }
 
@@ -124,7 +137,7 @@ namespace PosterCollection
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(LoginPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();

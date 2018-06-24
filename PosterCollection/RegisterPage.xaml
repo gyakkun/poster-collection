@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="PosterCollection.RegisterPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PosterCollection"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="注册" FontFamily="Microsoft YaHei" FontSize="32" FontWeight="Bold" Margin="10"/>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="角色" FontSize="24" Margin="5" Width="150"/>
+                <ComboBox Name="roleCombox" SelectionChanged="ComboBox_SelectionChanged"  Margin="5" Width="150">
+                    <ComboBoxItem Content="管理员"/>
+                    <ComboBoxItem Content="用户"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Name="keyPanel" Visibility="Collapsed" Orientation="Horizontal" Margin="10">
+                <TextBlock Text="管理员密钥" FontSize="24" Margin="5" Width="150"/>
+                <PasswordBox Name="keyTextBox" Margin="5" Width="150"/>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="账号" Margin="5" Width="150" FontSize="24"/>
+                <TextBox Name="usernameTextBox" Width="150" Margin="5"/>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="密码" Margin="5" Width="150" FontSize="24"/>
+                <PasswordBox Width="150" Name="passwordTextBox" Margin="5"/>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="确认密码" Margin="5" Width="150" FontSize="24"/>
+                <PasswordBox Width="150" Name="confirmTextBox" Margin="5"/>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="邮箱" Margin="5" Width="150" FontSize="24"/>
+                <AutoSuggestBox Name="emailTextBox" PlaceholderText="可选" Width="150" Margin="5"/>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="电话" Margin="5" Width="150" FontSize="24"/>
+                <AutoSuggestBox Name="phoneTextBox" PlaceholderText="可选" Width="150" Margin="5"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button Name="confirmButton" Margin="5,5,205,5" Content="确定" Click="confirmButton_Click"/>
+                <Button Name="cancelButton" Content="取消" Margin="5" Click="cancelButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -37,6 +37,7 @@ namespace PosterCollection
             //MyProgressRing.IsActive = true;
             //MyProgressRing.Visibility = Visibility.Visible;
             viewModel = ViewModel.Instance;
+            viewModel.initcollection();
             InitializeList();
             TileService.GenerateTiles();
         }
