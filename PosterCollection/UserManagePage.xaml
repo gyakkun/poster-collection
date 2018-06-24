@@ -10,33 +10,8 @@
     mc:Ignorable="d">
 
     <Grid >
-
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="Window">
-                <VisualStateGroup.Transitions>
-                    <VisualTransition GeneratedDuration="0:0:1"/>
-                </VisualStateGroup.Transitions>
-
-                <VisualState x:Name="VisualStateMin">
-                    <VisualState.Setters>
-                        <Setter Target="EditGrid.(UIElement.Visibility)" Value="Collapsed"/>
-                        <Setter Target="ListView.(Grid.ColumnSpan)" Value="2"/>
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState x:Name="VisualStateBigger">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800"/>
-                    </VisualState.StateTriggers>
-                </VisualState>
-
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <Grid.Background>
-            <ImageBrush ImageSource="Assets/Background.png"/>
+            <ImageBrush ImageSource="Assets/defaultBackground.png"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -56,12 +31,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
+            <StackPanel Name="AddPanel" Margin="10,0,0,0" Orientation="Horizontal">
                 <AppBarButton x:Name="AddButton" VerticalAlignment="Center" Height="37" Width="40" Icon="Add" Click="AddButton_Click"/>
                 <TextBlock Text="添加用户" Margin="5,5,0,0" VerticalAlignment="Center"/>
             </StackPanel>
             
-            <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="10" HorizontalAlignment="Right">
+            <StackPanel Name="SearchPanel" Orientation="Horizontal" Grid.Column="2" Margin="10" HorizontalAlignment="Right">
                 <AutoSuggestBox x:Name="Search" Width="175" PlaceholderText="Search" Height="37" />
                 <AppBarButton x:Name="SearchButton" VerticalAlignment="Center" Height="37" Width="40" Icon="Find" Click="SearchButton_Click"/>
             </StackPanel>
@@ -103,6 +78,10 @@
                 <StackPanel Orientation="Horizontal"  Margin="10">
                     <TextBlock Text="用户名：" Width="100" />
                     <TextBox Name="usernameTextBlock" Width="200"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="10">
+                    <TextBlock Text="密码：" Width="100" />
+                    <PasswordBox Name="passwordTextBlock" Width="200"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <TextBlock Text="角色：" Width="100" />

@@ -26,9 +26,8 @@ namespace PosterCollection {
         private string releaseYear = "";
         private string sortBy = "&sort_by=popularity.desc";
         private bool first = true;
-        //是不是用户
-        private bool isUser = true;
-
+       
+        private UsersInfo user;
 
         public MainPage()
         {
@@ -45,16 +44,12 @@ namespace PosterCollection {
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if(e.Parameter is int && (int)e.Parameter == 0)
+            
+            if(e.Parameter is UsersInfo)
             {
-                isUser = false;
-                Users.Visibility = Visibility.Visible;
+                user = ((UsersInfo)e.Parameter);
             }
-            else if(e.Parameter is int && (int)e.Parameter == 1)
-            {
-                isUser = true;
-                Users.Visibility = Visibility.Collapsed;
-            }
+            
         }
 
 
@@ -197,8 +192,8 @@ namespace PosterCollection {
             }
             else if (Users.IsSelected)
             {
-                ListFrame.Navigate(typeof(UserManagePage));
-                TitleTextBlock.Text = "UserManage";
+                ListFrame.Navigate(typeof(UserManagePage),user);
+                TitleTextBlock.Text = user.Username;
             }
         }
 

@@ -144,6 +144,7 @@ namespace PosterCollection.ViewModels
                 statement.Bind(3, user.Email);
                 statement.Bind(4, user.Phone);
                 statement.Bind(5, user.Id);
+                statement.Step();
             }
         }
 

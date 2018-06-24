@@ -47,10 +47,10 @@ namespace PosterCollection {
 
         public static String USER_TABLE = "UserTable";
         public static String SQL_CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS " + USER_TABLE + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Username VARCHAR(100),Password VARCHAR(100),Email VARCHAR(50),Phone VARCHAR(20), Role INTEGER);";
-        public static String SQL_INSERT_USER = "INSERT INTO " + USER_TABLE + "(UserName,Password,Email,Phone,Role) VALUES(?,?,?,?,?);";
+        public static String SQL_INSERT_USER = "INSERT INTO " + USER_TABLE + "(Username,Password,Email,Phone,Role) VALUES(?,?,?,?,?);";
         public static String SQL_QUERY_USER = "SELECT * FROM " + USER_TABLE;
         public static String SQL_DELETE_USER = "DELETE FROM " + USER_TABLE + " WHERE Id = ?";
-        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?, Password = ?, Email = ?, Phone = ? WHERE Id = ?";
+        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?,Password = ?,Email = ?,Phone = ? WHERE Id = ?";
 
 
         private void BackRequested(object sender, BackRequestedEventArgs e)

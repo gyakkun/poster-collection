@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using System.Security.Cryptography;
 using System.Text;
 using PosterCollection.ViewModels;
+using PosterCollection.Models;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -34,7 +35,7 @@ namespace PosterCollection
                     if(ViewModel.Instance.UsersList[i].Password == Convert.ToBase64String(s))
                     {
                         await new Windows.UI.Popups.MessageDialog("登录成功！").ShowAsync();
-                        this.Frame.Navigate(typeof(MainPage),typeComboBox.SelectedItem);
+                        this.Frame.Navigate(typeof(MainPage), ViewModel.Instance.UsersList[i]);
                     }
                     else
                     {
