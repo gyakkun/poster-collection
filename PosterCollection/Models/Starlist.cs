@@ -23,6 +23,5 @@ namespace PosterCollection.Models
             this.comment = comment;
             this.type = type;
         }
-
     }
 }

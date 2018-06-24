@@ -36,6 +36,19 @@
                 </GridView>
 
             </StackPanel>
+
+            <ProgressRing
+            x:Name="ProgressRingInPosterBrowserPage"
+            Width="250"
+            Height="250"
+            Foreground="DarkViolet"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            Visibility="Visible"
+            IsActive="True"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />
+
         </Grid>
     </ScrollViewer>
 </Page>

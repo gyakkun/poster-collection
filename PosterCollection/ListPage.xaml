@@ -69,5 +69,16 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    Grid.Row="2"/>
+        <ProgressRing
+            x:Name="ProgressRingInListPage"
+            Width="250"
+            Height="250"
+            Foreground="DarkCyan"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center" />
     </Grid>
 </Page>
+<!--Visibility="Visible"
+IsActive="True"-->

@@ -1,5 +1,4 @@
 ﻿using PosterCollection.Models;
-using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
 using System.IO;
@@ -11,8 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace PosterCollection
-{
+namespace PosterCollection {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -29,6 +27,7 @@ namespace PosterCollection
         private async void Starlist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (Star)e.ClickedItem;
+            //点击的是电影
             if(item.type == 0)
             {
                 String url = String.Format("https://api.themoviedb.org/3/movie/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
@@ -43,7 +42,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheMovieDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheMovieDetail.poster_path != null)
                 {
@@ -67,6 +66,7 @@ namespace PosterCollection
                 }
                 this.Frame.Navigate(typeof(DetailPage), 0);
             }
+            //点击的是电视剧
             else
             {
                 String url = String.Format("https://api.themoviedb.org/3/tv/{0}?api_key=7888f0042a366f63289ff571b68b7ce0&append_to_response=casts", item.id);
@@ -82,7 +82,7 @@ namespace PosterCollection
                 }
                 else
                 {
-                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.png";
+                    viewModel.TheTVDetail.backdrop_path = "Assets/defaultBackground.jpg";
                 }
                 if (viewModel.TheTVDetail.poster_path != null)
                 {
@@ -107,14 +107,14 @@ namespace PosterCollection
                 this.Frame.Navigate(typeof(DetailPage), 1);
             }  
         }
-
+        //点击删除按键
         private void Delete(object sender, RoutedEventArgs e)
         {
             dynamic temp = e.OriginalSource;
             Star s= temp.DataContext;
             viewModel.DeleteStar(s.id,s.type);
         }
-
+        //点击修改评论按键
         private async void edit(object sender, RoutedEventArgs e)
         {
             dynamic temp = e.OriginalSource;
@@ -123,7 +123,7 @@ namespace PosterCollection
            await CommentDialog.ShowAsync();
 
         }
-
+        //确定修改评论
         private void ok(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             int id = selectedItem.id;

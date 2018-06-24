@@ -1,27 +1,17 @@
 ﻿using PosterCollection.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace PosterCollection
-{
+namespace PosterCollection {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -41,9 +31,11 @@ namespace PosterCollection
         {
             if (e.Parameter is String)
             {
+                //清空原来的海报，背景列表
                 allPosters.Clear();
                 allBackdrops.Clear();
                 url = (String)e.Parameter;
+                //请求该视频的海报，背景
                 HttpClient client = new HttpClient();
                 String Jresult = await client.GetStringAsync(url);
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Pictures));
@@ -69,13 +61,13 @@ namespace PosterCollection
                 }
             }
         }
-
+        //点击某海报
         private void GridView_postersItemClick(object sender, ItemClickEventArgs e)
         {
             Poster poster = (Poster)e.ClickedItem;
             this.Frame.Navigate(typeof(ShowPosterPage), poster.file_path);
         }
-
+        //点击某背景
         private void GridView_backdropsItemClick(object sender, ItemClickEventArgs e)
         {
             Backdrop backdrop = (Backdrop)e.ClickedItem;
