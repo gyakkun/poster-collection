@@ -1,21 +1,11 @@
 ﻿using SQLitePCL;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace PosterCollection
@@ -36,8 +26,11 @@ namespace PosterCollection
 
             conn = new SQLiteConnection(DB_NAME);
 
-
             using (var statement = conn.Prepare(SQL_CREATE_TABLE))
+            {
+                statement.Step();
+            }
+            using (var statement = conn.Prepare(SQL_CREATE_USER_TABLE))
             {
                 statement.Step();
             }
@@ -52,6 +45,15 @@ namespace PosterCollection
         public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
         public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ? AND TYPE = ?";
         public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ? AND TYPE = ?";
+
+        public static String USER_TABLE = "UserTable";
+        public static String SQL_CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS " + USER_TABLE + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Username VARCHAR(100),Password VARCHAR(100),Email VARCHAR(50),Phone VARCHAR(20), Role INTEGER);";
+        public static String SQL_INSERT_USER = "INSERT INTO " + USER_TABLE + "(UserName,Password,Email,Phone,Role) VALUES(?,?,?,?,?);";
+        public static String SQL_QUERY_USER = "SELECT * FROM " + USER_TABLE;
+        public static String SQL_DELETE_USER = "DELETE FROM " + USER_TABLE + " WHERE Id = ?";
+        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?, Password = ?, Email = ?, Phone = ? WHERE Id = ?";
+
+
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -119,7 +121,7 @@ namespace PosterCollection
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(LoginPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();

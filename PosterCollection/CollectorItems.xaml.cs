@@ -1,5 +1,4 @@
 ﻿using PosterCollection.Models;
-using PosterCollection.Service;
 using PosterCollection.ViewModels;
 using System;
 using System.IO;
