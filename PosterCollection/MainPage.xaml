@@ -30,7 +30,7 @@
                        FontWeight="Bold"
                        Margin="10,5,0,0"/>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="10" RelativePanel.AlignRightWithPanel="True">
+                <StackPanel Name="searchPanel" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="10" RelativePanel.AlignRightWithPanel="True">
                     <AutoSuggestBox Name="Search" Width="200" Height="Auto"/>
                     <AppBarButton Name="SearchButton" Height="32" Icon="Find" Click="SearchButton_Click"/>
                 </StackPanel>
@@ -57,6 +57,12 @@
                                 <TextBlock FontSize="24" Margin="20,0,0,0">Collection</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
+                    <ListBoxItem Name="Users">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE716;" />
+                            <TextBlock FontSize="24" Margin="20,0,0,0">Users</TextBlock>
+                        </StackPanel>
+                    </ListBoxItem>
                 </ListBox>
                 </SplitView.Pane>
                 <SplitView.Content>

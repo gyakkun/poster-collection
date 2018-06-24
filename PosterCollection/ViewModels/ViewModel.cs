@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PosterCollection.Models;
 using PosterCollection.Service;
 using SQLitePCL;
@@ -22,6 +18,9 @@ namespace PosterCollection.ViewModels
         private MovieDetail theMovieDetail = new MovieDetail();
         //某电视剧详情
         private TVDetail theTVDetail = new TVDetail();
+        //用户信息
+        private ObservableCollection<UsersInfo> usersList = new ObservableCollection<UsersInfo>();
+
 
         private static ViewModel instance;
 
@@ -38,6 +37,13 @@ namespace PosterCollection.ViewModels
                 }
             }
 
+            using (var statement = db.Prepare(App.SQL_QUERY_USER))
+            {
+                while(SQLiteResult.ROW == statement.Step())
+                {
+                    usersList.Add(new UsersInfo(Convert.ToInt32(statement[0]),(string)statement[1],(string)statement[2],(string)statement[3], (string)statement[4], Convert.ToInt32(statement[5])));
+                }
+            }
         }
 
         public static ViewModel Instance
@@ -70,6 +76,11 @@ namespace PosterCollection.ViewModels
             set { starlist = value; }
         }
 
+        public ObservableCollection<UsersInfo> UsersList
+        {
+            get { return usersList; }
+            set { usersList = value; }
+        }
 
         public MovieDetail TheMovieDetail
         {
@@ -83,6 +94,59 @@ namespace PosterCollection.ViewModels
             set { theTVDetail = value; }
         }
 
+        public void createUser(UsersInfo user)
+        {
+            usersList.Add(user);      
+            var db = App.conn;
+
+            using (var Item = db.Prepare(App.SQL_INSERT_USER))
+            {
+                Item.Bind(1, user.Username);
+                Item.Bind(2, user.Password);
+                Item.Bind(3, user.Email);
+                Item.Bind(4, user.Phone);
+                Item.Bind(5, user.Role);
+                Item.Step();
+            }
+        }
+
+        public void deleteUser(int id)
+        {
+            for (int i = 0; i < usersList.Count; i++)
+            {
+                if (usersList[i].Id == id)
+                {
+                    usersList.RemoveAt(i);
+                    break;
+                }
+            }
+            using (var statement = App.conn.Prepare(App.SQL_DELETE_USER))
+            {
+                statement.Bind(1, id);
+                statement.Step();
+            }
+        }
+
+        public void updateUser(UsersInfo user)
+        {
+            for (int i = 0; i < usersList.Count; i++)
+            {
+                if (usersList[i].Id == user.Id)
+                {
+                    usersList[i] = user;
+                    break;
+                }
+            }
+            using (var statement = App.conn.Prepare(App.SQL_UPDATE_USER))
+            {
+                statement.Bind(1, user.Username);
+                statement.Bind(2, user.Password);
+                statement.Bind(3, user.Email);
+                statement.Bind(4, user.Phone);
+                statement.Bind(5, user.Id);
+            }
+        }
+
         public void AddMovieResult(MovieResult result)
         {
             queryMovieResults.Add(result);
@@ -92,6 +156,7 @@ namespace PosterCollection.ViewModels
         {
             queryTVResults.Add(result);
         }
+
         public void DeleteStar(int id,int type)
         {
             
@@ -111,6 +176,7 @@ namespace PosterCollection.ViewModels
                 statement.Step();
             }
         }
+
         public void EditComment(int id,string comment,int type)
         {
             for (int i = 0; i < starlist.Count; i++)
@@ -132,6 +198,7 @@ namespace PosterCollection.ViewModels
             }
 
         }
+
         public void AddStar(Star st)
         {
 
@@ -139,23 +206,17 @@ namespace PosterCollection.ViewModels
             TileService.GenerateTiles();
             var db = App.conn;
 
-            try
+            using (var Item = db.Prepare(App.SQL_INSERT))
             {
-                using (var Item = db.Prepare(App.SQL_INSERT))
-                {
-                    Item.Bind(1, st.id);
-                    Item.Bind(2, st.title);
-                    Item.Bind(3, st.imagepath);
-                    Item.Bind(4, st.posterpath);
-                    Item.Bind(5, st.comment);
-                    Item.Bind(6, st.type);
-                    Item.Step();
-                }
+                Item.Bind(1, st.id);
+                Item.Bind(2, st.title);
+                Item.Bind(3, st.imagepath);
+                Item.Bind(4, st.posterpath);
+                Item.Bind(5, st.comment);
+                Item.Bind(6, st.type);
+                Item.Step();
             }
-            catch (Exception ex)
-            {
 
-            }
         }
         public void clear()
         {

@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -25,6 +26,9 @@ namespace PosterCollection {
         private string releaseYear = "";
         private string sortBy = "&sort_by=popularity.desc";
         private bool first = true;
+        //是不是用户
+        private bool isUser = true;
+
 
         public MainPage()
         {
@@ -38,6 +42,21 @@ namespace PosterCollection {
             //程序开始时，载入了数据库，按照收藏的视频数据生成一次磁贴
             TileService.GenerateTiles();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if(e.Parameter is int && (int)e.Parameter == 0)
+            {
+                isUser = false;
+                Users.Visibility = Visibility.Visible;
+            }
+            else if(e.Parameter is int && (int)e.Parameter == 1)
+            {
+                isUser = true;
+                Users.Visibility = Visibility.Collapsed;
+            }
+        }
+
 
         //private  void showProgressRing() {
         //    MyProgressRing.IsActive = true;
@@ -175,6 +194,11 @@ namespace PosterCollection {
                 //收藏界面
                 ListFrame.Navigate(typeof(CollectorItems));
                 TitleTextBlock.Text = "Collection";
+            }
+            else if (Users.IsSelected)
+            {
+                ListFrame.Navigate(typeof(UserManagePage));
+                TitleTextBlock.Text = "UserManage";
             }
         }
 
@@ -416,9 +440,10 @@ namespace PosterCollection {
         //监控ListFrame，以便于决定某些空间的是否可见
         private void ListFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
-            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))&&!ListFrame.CurrentSourcePageType.Equals(typeof(CollectorItems)) ? Visibility.Visible : Visibility.Collapsed;
+            BackAppBarButton.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))&&!ListFrame.CurrentSourcePageType.Equals(typeof(CollectorItems))&& !ListFrame.CurrentSourcePageType.Equals(typeof(UserManagePage)) ? Visibility.Visible : Visibility.Collapsed;
             pageChangePanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage)) ? Visibility.Collapsed : Visibility.Visible;
             FilterSelectPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(ListPage))? Visibility.Collapsed : Visibility.Visible;
+            searchPanel.Visibility = !ListFrame.CurrentSourcePageType.Equals(typeof(UserManagePage)) ? Visibility.Visible : Visibility.Collapsed;
         }
         //电视剧类别改变
         private void tvGenreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
