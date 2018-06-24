@@ -1,14 +1,25 @@
 ﻿using SQLitePCL;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace PosterCollection {
+namespace PosterCollection
+{
     /// <summary>
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。
     /// </summary>
@@ -25,34 +36,40 @@ namespace PosterCollection {
 
             conn = new SQLiteConnection(DB_NAME);
 
+
             using (var statement = conn.Prepare(SQL_CREATE_TABLE))
             {
                 statement.Step();
             }
+
+
+            using (var statement = conn.Prepare("CREATE TABLE IF NOT EXISTS Movies (Id INTEGER PRIMARY KEY NOT NULL,Title VARCHAR(100), overview VARCHAR(150),Type INTEGER);"))
+            {
+                statement.Step();
+            }
+
             using (var statement = conn.Prepare(SQL_CREATE_USER_TABLE))
             {
                 statement.Step();
             }
         }
         private static TileUpdater tileUpdate;
-        //数据库管理语句
         static public SQLiteConnection conn { get; set; }
         public static String DB_NAME = "Collector.db";
         public static String TABLE_NAME = "Collection";
-        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),POSTER VERCHAR(150), COMMENT VARCHAR(150),TYPE INTEGER);";
-        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(Id,Title,PATH,POSTER,COMMENT,TYPE) VALUES(?,?,?,?,?,?);";
-        public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME;
-        public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE Id = ? AND TYPE = ?";
-        public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE Id = ? AND TYPE = ?";
+        public static String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,MovieID INTEGER NOT NULL,Title VARCHAR(100),PATH VARCHAR(150),POSTER VERCHAR(150), COMMENT VARCHAR(150),TYPE INTEGER ,UID INTEGER, FOREIGN KEY(MovieID) REFERENCES Movies(Id),FOREIGN KEY(UID) REFERENCES UserTable(Id));";
+        public static String SQL_INSERT = "INSERT INTO " + TABLE_NAME + "(MovieID,Title,PATH,POSTER,COMMENT,TYPE,UID) VALUES(?,?,?,?,?,?,?);";
+        public static String SQL_QUERY_VALUE = "SELECT * FROM " + TABLE_NAME+" WHERE UID = (?)";
+        public static String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE MovieID = ? AND TYPE = ?";
+        public static String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET COMMENT = ? WHERE MovieID = ? AND TYPE = ?";
+
 
         public static String USER_TABLE = "UserTable";
         public static String SQL_CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS " + USER_TABLE + "(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Username VARCHAR(100),Password VARCHAR(100),Email VARCHAR(50),Phone VARCHAR(20), Role INTEGER);";
         public static String SQL_INSERT_USER = "INSERT INTO " + USER_TABLE + "(Username,Password,Email,Phone,Role) VALUES(?,?,?,?,?);";
         public static String SQL_QUERY_USER = "SELECT * FROM " + USER_TABLE;
         public static String SQL_DELETE_USER = "DELETE FROM " + USER_TABLE + " WHERE Id = ?";
-        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?,Password = ?,Email = ?,Phone = ? WHERE Id = ?";
-
-
+        public static String SQL_UPDATE_USER = "UPDATE " + USER_TABLE + " SET Username = ?, Password = ?, Email = ?, Phone = ? WHERE Id = ?";
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -70,7 +87,7 @@ namespace PosterCollection {
 
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack && !((Frame)sender).CurrentSourcePageType.Equals(typeof(MainPage)) ?
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack && !((Frame)sender).CurrentSourcePageType.Equals(typeof(LoginPage)) ?
                 AppViewBackButtonVisibility.Visible : Windows.UI.Core.AppViewBackButtonVisibility.Collapsed;
         }
 

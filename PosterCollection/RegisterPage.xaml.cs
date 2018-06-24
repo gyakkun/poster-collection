@@ -24,7 +24,7 @@ namespace PosterCollection
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(roleCombox.SelectedIndex == 1)
+            if (roleCombox.SelectedIndex == 1)
             {
                 keyPanel.Visibility = Visibility.Collapsed;
             }
@@ -37,14 +37,14 @@ namespace PosterCollection
         private async void confirmButton_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
-            if(roleCombox.SelectedIndex == -1||usernameTextBox.Text == ""|| confirmTextBox.Password == "" || passwordTextBox.Password == ""||(roleCombox.SelectedIndex == 0 && keyTextBox.Password == ""))
+            if (roleCombox.SelectedIndex == -1 || usernameTextBox.Text == "" || confirmTextBox.Password == "" || passwordTextBox.Password == "" || (roleCombox.SelectedIndex == 0 && keyTextBox.Password == ""))
             {
                 flag = false;
                 await new Windows.UI.Popups.MessageDialog("请完善必填信息！").ShowAsync();
             }
-            for(int i = 0; i < ViewModel.Instance.UsersList.Count; i++)
+            for (int i = 0; i < ViewModel.Instance.UsersList.Count; i++)
             {
-                if(ViewModel.Instance.UsersList[i].Username == usernameTextBox.Text)
+                if (ViewModel.Instance.UsersList[i].Username == usernameTextBox.Text)
                 {
                     flag = false;
                     await new Windows.UI.Popups.MessageDialog("用户已存在，注册失败！").ShowAsync();
@@ -52,30 +52,30 @@ namespace PosterCollection
                 }
             }
 
-            if(confirmTextBox.Password != "" && passwordTextBox.Password != ""&&confirmTextBox.Password != passwordTextBox.Password)
+            if (confirmTextBox.Password != "" && passwordTextBox.Password != "" && confirmTextBox.Password != passwordTextBox.Password)
             {
                 flag = false;
                 await new Windows.UI.Popups.MessageDialog("两次密码输入不一致，注册失败！").ShowAsync();
             }
-            if(keyTextBox.Password != ""&&roleCombox.SelectedIndex == 0)
+            if (keyTextBox.Password != "" && roleCombox.SelectedIndex == 0)
             {
                 MD5 md5 = MD5.Create(); //实例化一个md5对像
                                         // 加密后是一个字节类型的数组，这里要注意编码UTF8/Unicode等的选择　
                 byte[] s = md5.ComputeHash(Encoding.UTF8.GetBytes(keyTextBox.Password));
 
-                if(key != Convert.ToBase64String(s))
+                if (key != Convert.ToBase64String(s))
                 {
                     flag = false;
                     await new Windows.UI.Popups.MessageDialog("管理员密钥错误，注册失败！").ShowAsync();
                 }
             }
-            if(flag)
+            if (flag)
             {
                 MD5 md5 = MD5.Create(); //实例化一个md5对像
                                         // 加密后是一个字节类型的数组，这里要注意编码UTF8/Unicode等的选择　
                 byte[] s = md5.ComputeHash(Encoding.UTF8.GetBytes(passwordTextBox.Password));
 
-                ViewModel.Instance.createUser(new UsersInfo(-1,usernameTextBox.Text, Convert.ToBase64String(s), emailTextBox.Text,phoneTextBox.Text,roleCombox.SelectedIndex));
+                ViewModel.Instance.createUser(new UsersInfo(-1, usernameTextBox.Text, Convert.ToBase64String(s), emailTextBox.Text, phoneTextBox.Text, roleCombox.SelectedIndex));
                 await new Windows.UI.Popups.MessageDialog("注册成功！").ShowAsync();
                 this.Frame.GoBack();
             }

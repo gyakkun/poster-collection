@@ -37,6 +37,7 @@ namespace PosterCollection {
             //MyProgressRing.Visibility = Visibility.Visible;
             //载入数据库，初始化ViewModel
             viewModel = ViewModel.Instance;
+            viewModel.initcollection();
             InitializeList();
             //程序开始时，载入了数据库，按照收藏的视频数据生成一次磁贴
             TileService.GenerateTiles();
