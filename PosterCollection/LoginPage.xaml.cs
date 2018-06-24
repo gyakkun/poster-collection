@@ -36,7 +36,7 @@ namespace PosterCollection
                     {
                         await new Windows.UI.Popups.MessageDialog("登录成功！").ShowAsync();
                         ViewModel.Instance.currentUid = ViewModel.Instance.UsersList[i].Id;
-                        this.Frame.Navigate(typeof(MainPage));
+                        this.Frame.Navigate(typeof(MainPage), ViewModel.Instance.UsersList[i]);
                     }
                     else
                     {

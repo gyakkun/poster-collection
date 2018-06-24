@@ -147,17 +147,9 @@ namespace PosterCollection.ViewModels
             }
             catch (Exception ex)
             {
-                statement.Bind(1, user.Username);
-                statement.Bind(2, user.Password);
-                statement.Bind(3, user.Email);
-                statement.Bind(4, user.Phone);
-                statement.Bind(5, user.Id);
-                statement.Step();
             }
         }
 
-            }
-        }
         public void DeleteStar(int id,int type)
         {
             
@@ -284,9 +276,8 @@ namespace PosterCollection.ViewModels
                 statement.Bind(3, user.Email);
                 statement.Bind(4, user.Phone);
                 statement.Bind(5,  user.Id);
+                statement.Step();
             }
         }
-
-
     }
 }
